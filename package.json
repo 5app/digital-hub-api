@@ -1,0 +1,31 @@
+{
+  "name": "digital-hub-api",
+  "version": "0.0.0",
+  "description": "API for interacting with a Digital Hub",
+  "main": "src/index.js",
+  "scripts": {
+    "lint": "eslint ./",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5app/digital-hub-api.git"
+  },
+  "author": "MrSwitch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/5app/digital-hub-api/issues"
+  },
+  "homepage": "https://github.com/5app/digital-hub-api#readme",
+  "dependencies": {
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5",
+    "tricks": "^1.7.3"
+  },
+  "devDependencies": {
+    "csv-parse": "^2.0.0",
+    "dotenv": "^4.0.0",
+    "eslint": "^4.10.0",
+    "yamljs": "^0.3.0"
+  }
+}

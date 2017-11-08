@@ -1,0 +1,75 @@
+root: collectionAsset
+query:
+    fields:
+        'Collection ID': 'id'
+        'Collection Name': 'name'
+        'Collection Type': 'collection_type'
+        'Teams': 'GROUP_CONCAT(DISTINCT appGroups.groups.name)'
+        'Updated': 'DATE(updated_time)'
+        'Created': 'DATE(created_time)'
+        'Pinned': 'COUNT(DISTINCT userCollections.id)'
+        'Completed': 'COUNT(DISTINCT userCollections$a.id)'
+        'Average Progress': 'AVG(userCollections$progress.completion_rate)'
+        'Inactive 30 days': 'COUNT(DISTINCT userCollections$b.id)'
+        'Inactive 90 days': 'COUNT(DISTINCT userCollections$c.id)'
+        'Unpinned - Completed': 'COUNT(DISTINCT userCollections$d.id)'
+        'Unpinned - Not completed': 'COUNT(DISTINCT userCollections$e.id)'
+        'Ratings': 'COUNT(DISTINCT assetCols$a.commonAsset.rating.id)'
+        'Average Rating': 'AVG(assetCols$a.commonAsset.rating.rating)'
+        'Opens': 'COUNT(DISTINCT events$opens.id)'
+        'Asset Opens': 'COUNT(DISTINCT assetCols$b.commonAsset.events.id)'
+        'Pinned Events': 'COUNT(DISTINCT events$a.id)'
+        'Pinned via Recommended Events': 'COUNT(DISTINCT events$b.id)'
+        'Unpinned Events': 'COUNT(DISTINCT events$c.id)'
+    groupby: 'id'
+    orderby: 'name'
+    limit: 10000
+    format: 'csv'
+    filter:
+      type: 'collection'
+    join:
+      userCollections:
+        type: 'user'
+      userCollections$progress:
+        is_deleted: 
+          - 0
+          - 1
+      userCollections$a:
+        completion_rate: 1
+        is_deleted: 
+          - 0
+          - 1
+      userCollections$b:
+        type: 'user'
+        '-completion_rate': 1
+        'updated_time': '..${isoSub30}'
+      userCollections$c:
+        type: 'user'
+        '-completion_rate': 1
+        'updated_time': '..${isoSub90}'
+      userCollections$d:
+        type: 'user'
+        'completion_rate': 1
+        'is_deleted': 1
+      userCollections$e:
+        type: 'user'
+        '-completion_rate': 1
+        'is_deleted': 1
+      assetCols$b:
+        commonAsset:
+          events:
+            action: 'open'
+            category: 'asset'
+      events$opens:
+        action: 'open'
+        category: 'collection'
+      events$a:
+        action: 'pin'
+        category: 'collection'
+      events$b:
+        action: 'pin'
+        category: 'collection'
+        label: 'recommended'
+      events$c:
+        action: 'unpin'
+        category: 'collection'

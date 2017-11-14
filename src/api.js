@@ -24,6 +24,15 @@ module.exports = class Hub {
 		options.json = true
 		options.rejectUnauthorized = false
 
+		{
+			const qs = options.qs
+			for (const x in qs) {
+				if (typeof qs[x] === 'object') {
+					qs[x] = JSON.stringify(qs[x])
+				}
+			}
+		}
+
 		return request(options)
 	}
 

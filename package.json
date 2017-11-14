@@ -2,7 +2,7 @@
   "name": "digital-hub-api",
   "version": "0.0.0",
   "description": "API for interacting with a Digital Hub",
-  "main": "src/index.js",
+  "main": "src/api.js",
   "scripts": {
     "lint": "eslint ./",
     "test": "npm run lint"

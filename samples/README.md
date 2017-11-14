@@ -6,7 +6,7 @@ To run the examples please put your credentials in a `.env` file in the samples 
 	DH_USERNAME='andrew@5app.com'
 	DH_PASSWORD='mysecretpassword'
 
-Then the samples may be executed with these Environment Variables using the node option **require** `-r dotenv/config`
+Then the samples may be executed with these Environment Variables using the node option **require** `-r dotenv/config` [dotenv](https://www.npmjs.com/package/dotenv)
 
 E.g.
 

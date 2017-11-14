@@ -14,10 +14,9 @@ const fs = require('fs')
 const path = require('path')
 
 const {
-	CLIENT_ID,
-	CLIENT_SECRET,
-	TENANT,
-	DEFAULT_ROOT_FOLDER_REFID
+	DH_USERNAME,
+	DH_PASSWORD,
+	DH_TENANT
 } = process.env
 
 // Get the file to operate over...
@@ -31,9 +30,9 @@ const SOURCE_ASSET_DATA = path.resolve(process.cwd(), args[0])
 
 // Initiate the connection
 const hub = new Hub({
-	tenant: TENANT,
-	client_id: CLIENT_ID,
-	client_secret: CLIENT_SECRET
+	tenant: DH_TENANT,
+	username: DH_USERNAME,
+	password: DH_PASSWORD
 })
 
 // Scope of fields
@@ -103,11 +102,11 @@ async function processRecord(record) {
 
 	// Get the Asset
 	let asset = await getAssetByRefId(refid)
-	const parent = await getAssetByRefId(parentrefid || DEFAULT_ROOT_FOLDER_REFID)
+	const parent = await getAssetByRefId(parentrefid)
 
 	// If there is no parent
 	if (!parent) {
-		throw new Error(`Cannot find parent ref: ${parentrefid || DEFAULT_ROOT_FOLDER_REFID}`)
+		throw new Error(`Cannot find parent ref: ${parentrefid}`)
 	}
 
 	// Set parent id
@@ -152,6 +151,10 @@ async function processRecord(record) {
 
 // Retrieve the asset using refid
 async function getAssetByRefId(refid) {
+
+	if (!refid) {
+		throw new Error('Missing reference')
+	}
 
 	return hub.api({
 		path: 'api/assets',

@@ -5,16 +5,16 @@ const path = require('path')
 const YAML = require('yamljs')
 
 const {
-	TENANT,
-	CLIENT_ID,
-	CLIENT_SECRET
+	DH_USERNAME,
+	DH_PASSWORD,
+	DH_TENANT
 } = process.env
 
 // Initiate the connection
 const hub = new Hub({
-	tenant: TENANT,
-	client_id: CLIENT_ID,
-	client_secret: CLIENT_SECRET
+	tenant: DH_TENANT,
+	username: DH_USERNAME,
+	password: DH_PASSWORD
 })
 
 // Select a report

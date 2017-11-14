@@ -41,13 +41,13 @@ module.exports = class Hub {
 
 		// Get the options used in this request
 		const {
-			client_id,
-			client_secret,
+			username,
+			password,
 		} = this.options
 
 		// Check the minimum requirements
-		if (!(client_id && client_secret)) {
-			throw new Error('Missing property client_id, client_secret')
+		if (!(username && password)) {
+			throw new Error('Missing property username, password')
 		}
 
 		// If the access_token has already been set return it...
@@ -61,8 +61,8 @@ module.exports = class Hub {
 			method: 'POST',
 			path: '/auth/login',
 			body: {
-				username: client_id,
-				password: client_secret
+				username,
+				password
 			}
 		})
 			.then(body => {

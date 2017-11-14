@@ -5,5 +5,5 @@ The script [./report.js](./report.js) accepts the name of the reports which is c
 You can demo this example and generate CSV reports via the command line...
 
 ```bash
-node -r ./env.js samples/report/report.js playlist-popularity > report.csv
+node -r dotenv/config report/report.js playlist-popularity > report.csv
 ```

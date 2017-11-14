@@ -8,11 +8,11 @@ A NodeJS API for interoperating with a [Digital Hub](https://5app.com)
 The [samples folder](./samples) highlights how the API can be used to automate and report operations with a Digital Hub.
 
 
-# Javascript API
+# Core API
 
 Create an instance of the hub
 
-```javasciprt
+```javascript
 const Hub = require('digital-hub-api');
 ```
 

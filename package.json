@@ -5,7 +5,8 @@
   "main": "src/api.js",
   "scripts": {
     "lint": "eslint ./",
-    "test": "npm run lint"
+    "test": "npm run lint && npm run spec && (nyc report --reporter=text-lcov | coveralls)",
+    "spec": "nyc mocha ./test/specs/**.js"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,14 @@
     "tricks": "^1.7.3"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "coveralls": "^3.0.0",
     "csv-parse": "^2.0.0",
     "dotenv": "^4.0.0",
     "eslint": "^4.10.0",
+    "mocha": "^4.0.1",
+    "mockery": "^2.1.0",
+    "nyc": "^11.3.0",
     "yamljs": "^0.3.0"
   }
 }

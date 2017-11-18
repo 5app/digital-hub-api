@@ -5,6 +5,7 @@
   "main": "src/api.js",
   "scripts": {
     "lint": "eslint ./",
+    "lint-fix": "eslint --fix ./",
     "test": "npm run lint && npm run spec && (nyc report --reporter=text-lcov | coveralls)",
     "spec": "nyc mocha ./test/specs/**.js"
   },

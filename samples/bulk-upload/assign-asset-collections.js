@@ -90,7 +90,7 @@ async function processRecord(record) {
 			await patchCollectionAsset(filter, {rank})
 		}
 	}
-	else  {
+	else {
 		const body = Object.assign({rank}, filter)
 		ref = await postCollectionAsset(body)
 	}

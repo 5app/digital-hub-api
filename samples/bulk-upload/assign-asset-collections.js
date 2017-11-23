@@ -39,8 +39,6 @@ const fields = ['id', 'asset_id', 'collection_id', 'rank']
 
 const columns = columns => columns.map(name => name.toLowerCase())
 
-const errors = []
-
 // Parse the contents of the CSV file
 const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
 
@@ -49,17 +47,15 @@ const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
 	}
 
 	const promise = data.reduce((promise, record, index) => promise.then(() => processRecord(record))
-		.then(resp => {
-			console.log(`${index}: CREATED`, resp)
+		.then(() => {
+			console.log([index, 'CREATED'].join())
 		})
 		.catch(resp => {
-			errors.push({record, error: resp.error || resp.message})
-			console.error(`${index}: ERROR`, resp.error || resp.message)
+			console.log([index, 'ERROR', resp.error || resp.message].join())
 		}), Promise.resolve())
 
 	promise.then(() => {
-		// Finally
-		console.log('ERRORS', errors)
+		// finally
 	})
 })
 
@@ -79,8 +75,8 @@ async function processRecord(record) {
 
 	// Get this match
 	const filter = {
-		asset_id: await getAssetByRefId(assetrefid),
-		collection_id: await getAssetByRefId(collectionrefid)
+		asset_id: (await getAssetByRefId(assetrefid)).id,
+		collection_id: (await getAssetByRefId(collectionrefid)).id
 	}
 
 	let ref = await getCollectionAsset(filter)
@@ -102,7 +98,7 @@ async function processRecord(record) {
 async function getCollectionAsset(filter) {
 
 	return hub.api({
-		path: 'api/assets',
+		path: 'api/assetCollections',
 		qs: {
 			fields,
 			filter,
@@ -118,7 +114,7 @@ async function patchCollectionAsset(filter, body) {
 
 	return hub.api({
 		method: 'patch',
-		path: 'api/assets',
+		path: 'api/assetCollections',
 		qs: {
 			filter,
 			limit: 1
@@ -132,14 +128,13 @@ async function postCollectionAsset(body) {
 
 	return hub.api({
 		method: 'post',
-		path: 'api/assets',
+		path: 'api/assetCollections',
 		qs: {
 			fields,
 			limit: 1
 		},
 		body
 	})
-		.then(resp => resp.data[0])
 }
 
 
@@ -160,5 +155,10 @@ async function getAssetByRefId(refid) {
 			limit: 1
 		}
 	})
-		.then(resp => resp.data[0])
+		.then(resp => {
+			if (resp.data.length) {
+				return resp.data[0]
+			}
+			throw new Error(`Cannot find asset refid: ${refid}`)
+		})
 }

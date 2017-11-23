@@ -7,28 +7,34 @@
 // Matches relative path to a thumbnail and uploads
 // Same for field
 
+// Import the DH API
 const Hub = require('../../src/api')
-const unique = require('tricks/array/unique')
+
+// Import tools for parsing CSV files
 const parse = require('csv-parse')
 const fs = require('fs')
 const path = require('path')
 
+// Import Utilities
+const unique = require('tricks/array/unique')
+
+// Assign the ENV VARS
 const {
 	DH_USERNAME,
 	DH_PASSWORD,
-	DH_TENANT
+	DH_TENANT,
+	PARENT_REFID
 } = process.env
 
 // Get the file to operate over...
 const args = process.argv.slice(2)
 
+// Exit if not args are given
 if (!args.length) {
 	throw new Error('Unknown csv path')
 }
-// Select a data source
-const SOURCE_ASSET_DATA = path.resolve(process.cwd(), args[0])
 
-// Initiate the connection
+// Configure an instance of the DH Api
 const hub = new Hub({
 	tenant: DH_TENANT,
 	username: DH_USERNAME,
@@ -51,36 +57,89 @@ const fields = [
 	'refid'
 ]
 
+// Format columns of CSV
 const columns = columns => columns.map(name => name.toLowerCase()).map(columnMapper)
 
-const errors = []
+// Select a data source
+const ABS_PATH_DATA = path.resolve(process.cwd(), args[0])
 
-// Parse the contents of the CSV file
-const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
+// Set the basepath
+let BASE_PATH = ABS_PATH_DATA.replace(/[^/]+$/, '')
 
-	if (err) {
-		return console.error(err)
-	}
+// Files
+const datafiles = []
 
-	const promise = data.reduce((promise, record, index) => promise.then(() => processRecord(record))
-		.then(resp => {
-			console.log(`${index}: CREATED`, resp)
+// If the path given is for a Directory...
+if (fs.lstatSync(ABS_PATH_DATA).isDirectory()) {
+
+	// Redefine the basepath
+	BASE_PATH = ABS_PATH_DATA
+
+	// Get the full paths of the CSV files in the directory
+	const files = fs.readdirSync(ABS_PATH_DATA)
+		.filter(file => path.extname(file) === '.csv')
+		.map(file => `${ABS_PATH_DATA}/${ file}`)
+
+	// Push them into the datafiles array
+	datafiles.push(...files)
+
+}
+// else, this is a single file path...
+else {
+	datafiles.push(ABS_PATH_DATA)
+}
+
+// Iterate through the filepaths in the filelist
+// Triggering `processFile`
+datafiles.reduce((promise, file) => promise.then(() => processFile(file)), Promise.resolve())
+
+
+// Process a file
+// Given a full path to a CSV file
+// Open it, perform rudimentary tests, convert each row to hash and pass to `processRecord`
+// Writes out the resolution, and any errors to stdout
+async function processFile(file) {
+
+	console.log(path.basename(file))
+
+	return new Promise(accept => {
+
+		// Parse the contents of the CSV file
+		const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
+
+			// Cancel if there was an error parsing the document
+			if (err) {
+				console.error(err.message)
+				accept()
+				return
+			}
+			// Cancel if the required column is missing
+			if (!('refid' in data[0])) {
+				console.error('Missing column refid')
+				accept()
+				return
+			}
+
+			// Run through the entries
+			const promise = data.reduce((promise, record) => promise.then(() => processRecord(record))
+				.then(resp => ([record.refid, resp.action]))
+				.catch(err => {
+					return [record.refid, 'ERROR', err.toString()]
+				})
+				.then(fields => console.log(fields.map(csvCell).join(',')))
+				, Promise.resolve())
+
+			promise.then(accept, accept)
 		})
-		.catch(resp => {
-			errors.push({record, error: resp.error || resp.message})
-			console.error(`${index}: ERROR`, resp.error || resp.message)
-		}), Promise.resolve())
 
-	promise.then(() => {
-		// Finally
-		console.log('ERRORS', errors)
+		// Stream file...
+		fs.createReadStream(file).pipe(parser)
 	})
-})
 
-fs.createReadStream(SOURCE_ASSET_DATA).pipe(parser)
+}
 
 
-// Process each row
+// Process each hash
 // This function interprets a normalized record Key=>Value record
 // Making requests to functions to store the data
 async function processRecord(record) {
@@ -102,16 +161,27 @@ async function processRecord(record) {
 
 	// Get the Asset
 	let asset = await getAssetByRefId(refid)
-	const parent = await getAssetByRefId(parentrefid)
 
-	// If there is no parent
-	if (!parent) {
-		throw new Error(`Cannot find parent ref: ${parentrefid}`)
-	}
+	// Set parent
+	if (typeof parentrefid !== 'undefined') {
 
-	// Set parent id
-	if (parentrefid && parent) {
-		patch.parent_id = parent.id
+		const ParentRefID = parentrefid || PARENT_REFID || null
+
+		// Get the parent...D
+		if (ParentRefID) {
+			const parent = await getAssetByRefId(ParentRefID)
+
+			// If there is no parent
+			if (!parent) {
+				throw new Error(`Cannot find parent ref: ${ParentRefID}`)
+			}
+
+			// Set parent id
+			patch.parent_id = parent.id
+		}
+		else if (ParentRefID === null) {
+			patch.parent_id = null
+		}
 	}
 
 	// ref id
@@ -122,12 +192,26 @@ async function processRecord(record) {
 
 	// If the asset does not exist
 	if (!asset) {
+
+		// Expect the minimum fields to be defined
+		verify(patch, {
+			name: true,
+			parent_id: true,
+			type: true
+		})
+
 		// Create a new record
 		asset = await createAssetRecord(patch)
+
+		// Asset Action
+		asset.action = 'created'
 	}
 	else {
 		// Patch record
 		await patchAssetRecord(asset, patch)
+
+		// Action
+		asset.action = 'patched'
 	}
 
 	// Tags
@@ -169,7 +253,7 @@ async function getAssetByRefId(refid) {
 		.then(resp => resp.data[0])
 }
 
-// Create entry
+// Create an asset record
 async function createAssetRecord(body) {
 	return hub.api({
 		method: 'post',
@@ -181,7 +265,7 @@ async function createAssetRecord(body) {
 	})
 }
 
-// Patch entry
+// Patch a asset record
 async function patchAssetRecord(asset, patch) {
 
 	// Find the diff of the second object from the first
@@ -200,12 +284,15 @@ async function patchAssetRecord(asset, patch) {
 	})
 }
 
-// Upload
-// POST's a file to be associated with a given asset
+// Upload File or Thumbnail + Associate w/ Asset
 async function upload(id, type, filePath) {
 
 	// The path given is relative to the SOURCE_ASSET_DATA
-	const FILE_PATH = path.resolve(SOURCE_ASSET_DATA.replace(/[^/]+$/, ''), formatFilePath(filePath))
+	const FILE_PATH = path.resolve(BASE_PATH, formatFilePath(filePath))
+
+	if (!fs.existsSync(FILE_PATH)) {
+		throw new Error(`Missing file: ${filePath}`)
+	}
 
 	// Get the file
 	return hub.api({
@@ -225,6 +312,7 @@ async function upload(id, type, filePath) {
 // If the tags do not exist, create them...
 async function setTags(asset_id, tags) {
 
+	// Get the id's for the incoming tags
 	const tag_ids = await getTagIds(tags)
 
 	// Get the tags associacted with the asset
@@ -262,7 +350,8 @@ async function getTagIds(tags) {
 			fields: ['id', 'name'],
 			filter: {
 				name: tags
-			}
+			},
+			limit: tags.length
 		}
 	})
 
@@ -346,4 +435,24 @@ function diffObject(base, obj) {
 		}
 	}
 	return diff
+}
+
+function verify(obj, rule, name) {
+
+	// Verify can take
+	if (typeof rule === 'object' && Object.keys(rule).length) {
+		for (const x in rule) {
+			verify(obj[x], rule[x], x)
+		}
+		return
+	}
+
+	if (rule === true && typeof obj === 'undefined') {
+		throw new Error(`Validation failed: ${name} is undefined`)
+	}
+
+}
+
+function csvCell(value) {
+	return value
 }

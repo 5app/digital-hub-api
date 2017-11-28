@@ -122,7 +122,7 @@ async function processFile(file) {
 
 			// Run through the entries
 			const promise = data.reduce((promise, record) => promise.then(() => processRecord(record))
-				.then(resp => ([record.refid, resp.action]))
+				.then(resp => ([resp.refid, resp.action, resp.messages.join(' - ')]))
 				.catch(err => {
 					return [record.refid, 'ERROR', err.toString()]
 				})
@@ -190,6 +190,9 @@ async function processRecord(record) {
 	// format
 	formatPatch(patch)
 
+	// Resp
+	let action;
+
 	// If the asset does not exist
 	if (!asset) {
 
@@ -204,33 +207,45 @@ async function processRecord(record) {
 		asset = await createAssetRecord(patch)
 
 		// Asset Action
-		asset.action = 'created'
+		action = 'created'
 	}
 	else {
 		// Patch record
 		await patchAssetRecord(asset, patch)
 
 		// Action
-		asset.action = 'patched'
+		action = 'patched'
 	}
+
+	// Additional operations
+	// These will not fail the asset build, but will report errors as notes
+	const messages = [];
+	const catchErrs = err => messages.push(err.message)
 
 	// Tags
 	if (tags) {
 		await setTags(asset.id, unique(tags.split(/,\s+/).map(s => s.trim())))
+		.catch(catchErrs)
 	}
 
 	// Thumbnail
 	if (thumbnailpath) {
-		await upload(asset.id, 'thumb', thumbnailpath)
+		const a = await upload(asset.id, 'thumb', thumbnailpath)
+		.catch(catchErrs)
 	}
 
 	// File Upload
 	if (path) {
-		await upload(asset.id, 'upload', path)
+		const a = await upload(asset.id, 'upload', path)
+		.catch(catchErrs)
 	}
 
 	// Return a reference
-	return asset
+	return {
+		refid,
+		action,
+		messages
+	}
 }
 
 // Retrieve the asset using refid
@@ -284,8 +299,15 @@ async function patchAssetRecord(asset, patch) {
 	})
 }
 
+
 // Upload File or Thumbnail + Associate w/ Asset
 async function upload(id, type, filePath) {
+
+	// Is this file path an HTTP URL?
+	if (filePath.match(/^https?:\/\//)) {
+		// TODO handle URL's
+		return
+	}
 
 	// The path given is relative to the SOURCE_ASSET_DATA
 	const FILE_PATH = path.resolve(BASE_PATH, formatFilePath(filePath))

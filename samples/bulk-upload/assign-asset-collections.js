@@ -46,13 +46,18 @@ const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
 		return console.error(err)
 	}
 
-	const promise = data.reduce((promise, record, index) => promise.then(() => processRecord(record))
-		.then(() => {
-			console.log([index, 'CREATED'].join())
-		})
-		.catch(resp => {
-			console.log([index, 'ERROR', resp.error || resp.message].join())
-		}), Promise.resolve())
+	const promise = data.reduce((promise, record, index) =>
+		promise
+			.then(() => processRecord(record))
+			.then(() => {
+				console.log([index, 'CREATED'].join())
+			})
+			.catch(resp => {
+				console.log([index, 'ERROR', resp.error || resp.message].join())
+			}),
+
+	Promise.resolve()
+	)
 
 	promise.then(() => {
 		// finally

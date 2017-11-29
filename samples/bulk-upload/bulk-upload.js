@@ -10,6 +10,12 @@
 // Import the DH API
 const Hub = require('../../src/api')
 
+// Reading files from URL's
+const request = require('request')
+	.defaults({
+		forever: true
+	})
+
 // Import tools for parsing CSV files
 const parse = require('csv-parse')
 const fs = require('fs')
@@ -25,14 +31,6 @@ const {
 	DH_TENANT,
 	PARENT_REFID
 } = process.env
-
-// Get the file to operate over...
-const args = process.argv.slice(2)
-
-// Exit if not args are given
-if (!args.length) {
-	throw new Error('Unknown csv path')
-}
 
 // Configure an instance of the DH Api
 const hub = new Hub({
@@ -60,38 +58,16 @@ const fields = [
 // Format columns of CSV
 const columns = columns => columns.map(name => name.toLowerCase()).map(columnMapper)
 
-// Select a data source
-const ABS_PATH_DATA = path.resolve(process.cwd(), args[0])
+const {
+	base,
+	files
+} = require('./datafiles')
 
-// Set the basepath
-let BASE_PATH = ABS_PATH_DATA.replace(/[^/]+$/, '')
-
-// Files
-const datafiles = []
-
-// If the path given is for a Directory...
-if (fs.lstatSync(ABS_PATH_DATA).isDirectory()) {
-
-	// Redefine the basepath
-	BASE_PATH = ABS_PATH_DATA
-
-	// Get the full paths of the CSV files in the directory
-	const files = fs.readdirSync(ABS_PATH_DATA)
-		.filter(file => path.extname(file) === '.csv')
-		.map(file => `${ABS_PATH_DATA}/${ file}`)
-
-	// Push them into the datafiles array
-	datafiles.push(...files)
-
-}
-// else, this is a single file path...
-else {
-	datafiles.push(ABS_PATH_DATA)
-}
+const BASE_PATH = base
 
 // Iterate through the filepaths in the filelist
 // Triggering `processFile`
-datafiles.reduce((promise, file) => promise.then(() => processFile(file)), Promise.resolve())
+files.reduce((promise, file) => promise.then(() => processFile(file)), Promise.resolve())
 
 
 // Process a file
@@ -109,16 +85,19 @@ async function processFile(file) {
 
 			// Cancel if there was an error parsing the document
 			if (err) {
-				console.error(err.message)
+				console.error('Error parsing file', err)
 				accept()
 				return
 			}
+
 			// Cancel if the required column is missing
 			if (!('refid' in data[0])) {
-				console.error('Missing column refid')
+				console.error('Ignoring file: Missing column refid')
 				accept()
 				return
 			}
+
+			console.log(`Processing ${data.length} records`)
 
 			// Run through the entries
 			const promise = data.reduce((promise, record) => promise.then(() => processRecord(record))
@@ -191,7 +170,7 @@ async function processRecord(record) {
 	formatPatch(patch)
 
 	// Resp
-	let action;
+	let action
 
 	// If the asset does not exist
 	if (!asset) {
@@ -219,25 +198,25 @@ async function processRecord(record) {
 
 	// Additional operations
 	// These will not fail the asset build, but will report errors as notes
-	const messages = [];
+	const messages = []
 	const catchErrs = err => messages.push(err.message)
 
 	// Tags
 	if (tags) {
-		await setTags(asset.id, unique(tags.split(/,\s+/).map(s => s.trim())))
-		.catch(catchErrs)
+		await setTags(asset.id, unique(tags.split(/[,.]\s*/).map(s => s.trim()).filter(x => !!x)))
+			.catch(catchErrs)
 	}
 
 	// Thumbnail
 	if (thumbnailpath) {
-		const a = await upload(asset.id, 'thumb', thumbnailpath)
-		.catch(catchErrs)
+		await upload(asset.id, 'thumb', thumbnailpath)
+			.catch(catchErrs)
 	}
 
 	// File Upload
 	if (path) {
-		const a = await upload(asset.id, 'upload', path)
-		.catch(catchErrs)
+		await upload(asset.id, 'upload', path)
+			.catch(catchErrs)
 	}
 
 	// Return a reference
@@ -303,17 +282,24 @@ async function patchAssetRecord(asset, patch) {
 // Upload File or Thumbnail + Associate w/ Asset
 async function upload(id, type, filePath) {
 
+	let file
+
 	// Is this file path an HTTP URL?
 	if (filePath.match(/^https?:\/\//)) {
-		// TODO handle URL's
-		return
+
+		// Promise...
+		// Pipe file to destination...
+		file = request.get(filePath).on('error', err => console.error(err))
 	}
+	else {
+		// The path given is relative to the SOURCE_ASSET_DATA
+		const FILE_PATH = path.resolve(BASE_PATH, formatFilePath(filePath))
 
-	// The path given is relative to the SOURCE_ASSET_DATA
-	const FILE_PATH = path.resolve(BASE_PATH, formatFilePath(filePath))
+		if (!fs.existsSync(FILE_PATH)) {
+			throw new Error(`Missing ${type} file: ${filePath}`)
+		}
 
-	if (!fs.existsSync(FILE_PATH)) {
-		throw new Error(`Missing file: ${filePath}`)
+		file = fs.createReadStream(FILE_PATH)
 	}
 
 	// Get the file
@@ -321,10 +307,11 @@ async function upload(id, type, filePath) {
 		method: 'post',
 		path: `asset/${id}/${type}`,
 		formData: {
-			fileupload: [
-				fs.createReadStream(FILE_PATH)
-			]
+			fileupload: [file]
 		}
+	}).catch(err => {
+		console.error(err)
+		throw new Error(`Failed ${type} ${filePath}`)
 	})
 }
 
@@ -379,8 +366,11 @@ async function getTagIds(tags) {
 
 	const matches = match_tags.data
 
-	// Show tags...
-	const new_tags = tags.filter(tag => !matches.find(item => item.name.toLowerCase() === tag.toLowerCase()))
+	// Existing tags
+	const existing_tags = match_tags.data.map(tag => tag.name)
+
+	// Get the diff
+	const new_tags = diff(existing_tags, tags, (a, b) => fts(a) === fts(b))
 
 	if (new_tags.length) {
 
@@ -391,6 +381,10 @@ async function getTagIds(tags) {
 				fields: ['id', 'name']
 			},
 			body: new_tags.map(name => ({name}))
+		}).catch(() => {
+			console.error('TAGS ERROR', tags, existing_tags, new_tags)
+			console.error('TAGS Formatted', tags.map(fts), existing_tags.map(fts))
+			throw new Error(`Failed to create new tags: ${new_tags}`)
 		})
 
 		// Merge new and existing
@@ -477,4 +471,32 @@ function verify(obj, rule, name) {
 
 function csvCell(value) {
 	return value
+}
+
+function fts(str) {
+	return removeAccents(str.toLowerCase().replace())
+}
+
+function removeAccents(p) {
+	const c = 'áàãâäéèêëíìîïóòõôöúùûüçÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÖÔÚÙÛÜÇ'
+	const s = 'aaaaaeeeeiiiiooooouuuucAAAAAEEEEIIIIOOOOOUUUUC'
+	let n = ''
+	for (let i = 0; i < p.length; i++) {
+		try {
+			if (c.search(p.substr(i, 1)) >= 0) {
+				n += s.substr(c.search(p.substr(i, 1)), 1)
+			}
+			else {
+				n += p.substr(i, 1)
+			}
+		}
+		catch (e) {
+			// Continue
+		}
+	}
+	return n
+}
+
+function diff(arrA, arrB, compare = (a, b) => a === b) {
+	return arrB.filter(b => !arrA.find(a => compare(a, b)))
 }

@@ -18,15 +18,6 @@ const {
 	DH_TENANT
 } = process.env
 
-// Get the file to operate over...
-const args = process.argv.slice(2)
-
-if (!args.length) {
-	throw new Error('Unknown csv path')
-}
-// Select a data source
-const SOURCE_ASSET_DATA = path.resolve(process.cwd(), args[0])
-
 // Initiate the connection
 const hub = new Hub({
 	tenant: DH_TENANT,
@@ -39,33 +30,54 @@ const fields = ['id', 'asset_id', 'collection_id', 'rank']
 
 const columns = columns => columns.map(name => name.toLowerCase())
 
-// Parse the contents of the CSV file
-const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
+const {
+	files
+} = require('./datafiles')
 
-	if (err) {
-		return console.error(err)
-	}
+files.reduce((promise, file) => promise.then(() => processFile(file)), Promise.resolve())
 
-	const promise = data.reduce((promise, record, index) =>
-		promise
-			.then(() => processRecord(record))
-			.then(() => {
-				console.log([index, 'CREATED'].join())
-			})
-			.catch(resp => {
-				console.log([index, 'ERROR', resp.error || resp.message].join())
-			}),
+//
+// Process a CSV file
+//
+async function processFile(filePath) {
 
-	Promise.resolve()
-	)
+	console.log(path.basename(filePath))
 
-	promise.then(() => {
-		// finally
+	return new Promise(accept => {
+
+		// Parse the contents of the CSV file
+		const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
+
+			if (err) {
+				console.error(err)
+				accept()
+				return
+			}
+
+			if (!('assetrefid' in data[0] && 'collectionrefid' in data[0])) {
+				// Missing columns
+				console.log('Missing columns assetrefid, collectionrefid')
+				accept()
+				return
+			}
+
+			data.reduce((promise, record, index) =>
+				promise
+					.then(() => processRecord(record))
+					.then(() => {
+						console.log([index, 'CREATED'].join())
+					})
+					.catch(resp => {
+						console.log([index, 'ERROR', resp.error || resp.message].join())
+					}),
+
+			Promise.resolve()
+			).then(accept, accept)
+		})
+
+		fs.createReadStream(filePath).pipe(parser)
 	})
-})
-
-fs.createReadStream(SOURCE_ASSET_DATA).pipe(parser)
-
+}
 
 // Process each row
 // This function interprets a normalized record Key=>Value record
@@ -75,7 +87,7 @@ async function processRecord(record) {
 	const {
 		assetrefid,
 		collectionrefid,
-		rank
+		...props
 	} = record
 
 	// Get this match
@@ -87,12 +99,10 @@ async function processRecord(record) {
 	let ref = await getCollectionAsset(filter)
 
 	if (ref) {
-		if (ref.rank !== +rank) {
-			await patchCollectionAsset(filter, {rank})
-		}
+		await patchCollectionAsset({id: ref.id}, props)
 	}
 	else {
-		const body = Object.assign({rank}, filter)
+		const body = Object.assign(props, filter)
 		ref = await postCollectionAsset(body)
 	}
 
@@ -116,6 +126,10 @@ async function getCollectionAsset(filter) {
 
 // Retrieve the asset using refid
 async function patchCollectionAsset(filter, body) {
+
+	if (Object.keys(body).length === 0) {
+		return
+	}
 
 	return hub.api({
 		method: 'patch',
@@ -160,6 +174,10 @@ async function getAssetByRefId(refid) {
 			limit: 1
 		}
 	})
+		.catch(err => {
+			console.error(err)
+			throw new Error(`Failed to retrieve the refid: ${refid}`)
+		})
 		.then(resp => {
 			if (resp.data.length) {
 				return resp.data[0]

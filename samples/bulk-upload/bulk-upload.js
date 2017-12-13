@@ -101,7 +101,7 @@ async function processFile(file) {
 
 			// Run through the entries
 			const promise = data.reduce((promise, record) => promise.then(() => processRecord(record))
-				.then(resp => ([resp.refid, resp.action, resp.messages.join(' - ')]))
+				.then(resp => ([resp.refid, resp.action, (resp.messages || []).join(' - ')]))
 				.catch(err => {
 					return [record.refid, 'ERROR', err.toString()]
 				})
@@ -130,6 +130,7 @@ async function processRecord(record) {
 		tags,
 		thumbnailpath,
 		path,
+		status,
 		...patch
 	} = record
 
@@ -140,6 +141,27 @@ async function processRecord(record) {
 
 	// Get the Asset
 	let asset = await getAssetByRefId(refid)
+
+	// Delete command
+	if (status === 'DELETE') {
+
+		const action = 'deleted'
+		const messages = []
+
+		if (asset && asset.id) {
+			await deleteAssetRecord(asset.id)
+		}
+		else {
+			// Nothing to do
+			messages.push('Not Found')
+		}
+
+		return {
+			refid,
+			action,
+			messages
+		}
+	}
 
 	// Set parent
 	if (typeof parentrefid !== 'undefined') {
@@ -275,6 +297,17 @@ async function patchAssetRecord(asset, patch) {
 		method: 'patch',
 		path: `api/assets/${asset.id}`,
 		body
+	})
+}
+
+
+// Delete asset record
+async function deleteAssetRecord(id) {
+
+	// Run
+	return hub.api({
+		method: 'delete',
+		path: `api/assets/${id}`
 	})
 }
 

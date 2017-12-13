@@ -87,6 +87,7 @@ async function processRecord(record) {
 	const {
 		assetrefid,
 		collectionrefid,
+		status,
 		...props
 	} = record
 
@@ -97,6 +98,27 @@ async function processRecord(record) {
 	}
 
 	let ref = await getCollectionAsset(filter)
+
+	// Delete command
+	if (status === 'DELETE') {
+
+		const action = 'deleted'
+		const messages = []
+
+		if (ref && ref.id) {
+			await deleteCollectionAsset(ref.id)
+		}
+		else {
+			// Nothing to do
+			messages.push('Not Found')
+		}
+
+		return {
+			action,
+			messages
+		}
+	}
+
 
 	if (ref) {
 		await patchCollectionAsset({id: ref.id}, props)
@@ -156,6 +178,15 @@ async function postCollectionAsset(body) {
 	})
 }
 
+
+// Retrieve the asset using refid
+async function deleteCollectionAsset(id) {
+
+	return hub.api({
+		method: 'delete',
+		path: `api/assetCollections/${ id}`
+	})
+}
 
 // Retrieve the asset using refid
 async function getAssetByRefId(refid) {

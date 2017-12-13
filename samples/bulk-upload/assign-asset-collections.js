@@ -7,23 +7,10 @@
 // Matches relative path to a thumbnail and uploads
 // Same for field
 
-const Hub = require('../../src/api')
+const api = require('./api')
 const parse = require('csv-parse')
 const fs = require('fs')
 const path = require('path')
-
-const {
-	DH_USERNAME,
-	DH_PASSWORD,
-	DH_TENANT
-} = process.env
-
-// Initiate the connection
-const hub = new Hub({
-	tenant: DH_TENANT,
-	username: DH_USERNAME,
-	password: DH_PASSWORD
-})
 
 // Fields
 const fields = ['id', 'asset_id', 'collection_id', 'rank']
@@ -134,7 +121,7 @@ async function processRecord(record) {
 // Retrieve the asset using refid
 async function getCollectionAsset(filter) {
 
-	return hub.api({
+	return api({
 		path: 'api/assetCollections',
 		qs: {
 			fields,
@@ -153,7 +140,7 @@ async function patchCollectionAsset(filter, body) {
 		return
 	}
 
-	return hub.api({
+	return api({
 		method: 'patch',
 		path: 'api/assetCollections',
 		qs: {
@@ -167,7 +154,7 @@ async function patchCollectionAsset(filter, body) {
 // Retrieve the asset using refid
 async function postCollectionAsset(body) {
 
-	return hub.api({
+	return api({
 		method: 'post',
 		path: 'api/assetCollections',
 		qs: {
@@ -182,7 +169,7 @@ async function postCollectionAsset(body) {
 // Retrieve the asset using refid
 async function deleteCollectionAsset(id) {
 
-	return hub.api({
+	return api({
 		method: 'delete',
 		path: `api/assetCollections/${ id}`
 	})
@@ -195,7 +182,7 @@ async function getAssetByRefId(refid) {
 		throw new Error('Missing reference')
 	}
 
-	return hub.api({
+	return api({
 		path: 'api/assets',
 		qs: {
 			fields: ['id'],

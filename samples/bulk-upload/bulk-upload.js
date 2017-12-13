@@ -7,8 +7,10 @@
 // Matches relative path to a thumbnail and uploads
 // Same for field
 
-// Import the DH API
-const Hub = require('../../src/api')
+
+// Get an instance of the Hub Api
+const api = require('./api.js')
+
 
 // Reading files from URL's
 const request = require('request')
@@ -26,18 +28,9 @@ const unique = require('tricks/array/unique')
 
 // Assign the ENV VARS
 const {
-	DH_USERNAME,
-	DH_PASSWORD,
-	DH_TENANT,
 	PARENT_REFID
 } = process.env
 
-// Configure an instance of the DH Api
-const hub = new Hub({
-	tenant: DH_TENANT,
-	username: DH_USERNAME,
-	password: DH_PASSWORD
-})
 
 // Scope of fields
 const fields = [
@@ -256,7 +249,7 @@ async function getAssetByRefId(refid) {
 		throw new Error('Missing reference')
 	}
 
-	return hub.api({
+	return api({
 		path: 'api/assets',
 		qs: {
 			fields,
@@ -271,7 +264,7 @@ async function getAssetByRefId(refid) {
 
 // Create an asset record
 async function createAssetRecord(body) {
-	return hub.api({
+	return api({
 		method: 'post',
 		path: 'api/assets',
 		qs: {
@@ -293,7 +286,7 @@ async function patchAssetRecord(asset, patch) {
 	}
 
 	// Run
-	return hub.api({
+	return api({
 		method: 'patch',
 		path: `api/assets/${asset.id}`,
 		body
@@ -305,7 +298,7 @@ async function patchAssetRecord(asset, patch) {
 async function deleteAssetRecord(id) {
 
 	// Run
-	return hub.api({
+	return api({
 		method: 'delete',
 		path: `api/assets/${id}`
 	})
@@ -336,7 +329,7 @@ async function upload(id, type, filePath) {
 	}
 
 	// Get the file
-	return hub.api({
+	return api({
 		method: 'post',
 		path: `asset/${id}/${type}`,
 		formData: {
@@ -358,7 +351,7 @@ async function setTags(asset_id, tags) {
 	const tag_ids = await getTagIds(tags)
 
 	// Get the tags associacted with the asset
-	const assigned_tags = await hub.api({
+	const assigned_tags = await api({
 		path: 'api/assetTags',
 		qs: {
 			fields: ['id', 'tag_id'],
@@ -372,7 +365,7 @@ async function setTags(asset_id, tags) {
 	const add =	tag_ids.filter(id => !assigned_tags.data.find(assetTag => assetTag.tag_id === id))
 
 	if (add.length) {
-		await hub.api({
+		await api({
 			method: 'post',
 			path: 'api/assetTags',
 			body: add.map(tag_id => ({asset_id, tag_id}))
@@ -386,7 +379,7 @@ async function setTags(asset_id, tags) {
 async function getTagIds(tags) {
 
 	// Get the tags
-	const match_tags = await hub.api({
+	const match_tags = await api({
 		path: 'api/tags',
 		qs: {
 			fields: ['id', 'name'],
@@ -407,7 +400,7 @@ async function getTagIds(tags) {
 
 	if (new_tags.length) {
 
-		const created_tags = await hub.api({
+		const created_tags = await api({
 			method: 'post',
 			path: 'api/tags',
 			qs: {

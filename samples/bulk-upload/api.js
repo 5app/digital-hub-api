@@ -19,4 +19,4 @@ const hub = new Hub({
 
 
 // Export the Api as a function
-module.exports = hub.api.bind(hub);
+module.exports = hub.api.bind(hub)

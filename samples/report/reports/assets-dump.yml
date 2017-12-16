@@ -1,0 +1,20 @@
+root: assets
+query:
+    fields:
+      'ID': 'id'
+      'RefID': 'refid'
+      'Name': 'name'
+      'Type': 'type'
+      'Description': 'description'
+      'ParentRefID': 'parentAsset.refid'
+      'Tags': 'GROUP_CONCAT(tags.name)'
+      'Mime Type': 'mime_type'
+      'WebURL': 'webUrl'
+      'Open In IFrame': 'openInIFrame'
+      'Disable Download': 'disableDownload'
+      'Completion Time': 'completion_time'
+      'Collection Type': 'collection_type'
+    format: csv
+    limit: 100
+    filter:
+        "-refid": null

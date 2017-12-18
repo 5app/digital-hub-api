@@ -37,7 +37,7 @@ hub.api({
 	.then(resp => {
 
 		if (!(typeof resp === 'string' || resp instanceof Buffer)) {
-			resp = JSON.stringify(resp);
+			resp = JSON.stringify(resp)
 		}
 
 		process.stdout.write(resp)

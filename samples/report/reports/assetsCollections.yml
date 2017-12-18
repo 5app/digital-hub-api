@@ -1,0 +1,10 @@
+root: assetCollections
+query:
+    fields:
+      'id': 'id'
+      'Collection ID': 'collectionAsset.id'
+      'Collection Name': 'collectionAsset.name'
+      'Asset ID': 'commonAsset.id'
+      'Asset Name': 'commonAsset.name'
+    format: csv
+    limit: 100

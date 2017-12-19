@@ -16,7 +16,7 @@ Open the sample directories to see the options for running each one.
 
 ## Debugging
 
-You can set the ENV VAR to `NODE_DEBUG=request' to see what is being transmitted in the api.
+You can set the ENV VAR to `NODE_DEBUG=request` to see what is being transmitted in the api.
 
 e.g.
 

@@ -156,11 +156,13 @@ describe('Digital Hub API', () => {
 		hub.api({
 			path: '/api',
 			qs: {
-				json
+				json,
+				a: 1
 			}
 		})
 			.then(resp => {
 				expect(resp.qs).to.have.property('json', '{"key":"value"}')
+				expect(resp.qs).to.have.property('a', 1)
 				expect(resp.qs).to.not.have.property('token')
 				expect(resp.qs).to.not.have.property('access_token')
 				done()

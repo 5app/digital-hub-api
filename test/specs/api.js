@@ -129,7 +129,7 @@ describe('Digital Hub API', () => {
 			password
 		})
 
-		hub.access_token = 'Bearer inst_token'
+		hub.access_token = 'inst_token'
 
 		hub.api({
 			path: '/api'

@@ -129,13 +129,13 @@ describe('Digital Hub API', () => {
 			password
 		})
 
-		hub.access_token = 'inst_token'
+		hub.access_token = 'Bearer inst_token'
 
 		hub.api({
 			path: '/api'
 		})
 			.then(resp => {
-				expect(resp.headers).to.have.property('Authorization', 'Bearer ' + hub.access_token)
+				expect(resp.headers).to.have.property('Authorization', hub.access_token)
 				done()
 			})
 			.catch(done)

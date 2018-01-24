@@ -55,7 +55,7 @@ describe('Digital Hub API', () => {
 			path: '/api'
 		})
 			.then(resp => {
-				expect(resp.qs.headers).to.have.property('Authorization', 'Bearer token')
+				expect(resp.headers).to.have.property('Authorization', 'Bearer token')
 				expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
 				done()
 			})
@@ -135,7 +135,7 @@ describe('Digital Hub API', () => {
 			path: '/api'
 		})
 			.then(resp => {
-				expect(resp.qs).to.have.property('access_token', hub.access_token)
+				expect(resp.headers).to.have.property('Authorization', hub.access_token)
 				done()
 			})
 			.catch(done)

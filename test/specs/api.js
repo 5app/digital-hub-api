@@ -43,7 +43,7 @@ describe('Digital Hub API', () => {
 		expect(hub).to.be.instanceof(Hub)
 	})
 
-	it('should trigger a request and append an access_token', done => {
+	it('should trigger a request and append an auth token to the headers', done => {
 
 		const hub = new Hub({
 			tenant,
@@ -55,7 +55,7 @@ describe('Digital Hub API', () => {
 			path: '/api'
 		})
 			.then(resp => {
-				expect(resp.qs).to.have.property('access_token', 'token')
+				expect(resp.qs.headers).to.have.property('Authorization', 'Bearer token')
 				expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
 				done()
 			})

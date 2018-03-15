@@ -2,11 +2,13 @@ root: assetCollections
 query:
     fields:
       'id': 'id'
+      'rank': 'collectionAsset.assetDomains.rank'
       'Collection ID': 'collectionAsset.id'
       'Collection RefId': 'collectionAsset.refid'
       'Collection Name': 'collectionAsset.name'
       'Asset ID': 'commonAsset.id'
       'Asset RefID': 'commonAsset.refid'
       'Asset Name': 'commonAsset.name'
-    format: csv
+    orderby: rank, collectionAsset.name
     limit: 100
+    format: csv

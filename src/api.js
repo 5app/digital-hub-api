@@ -83,7 +83,11 @@ module.exports = class Hub {
 
 		// Get the token
 		const access_token = await this.login()
-		extend(options, {qs: {access_token}})
+		extend(options, {
+			headers: {
+				Authorization: `Bearer ${access_token}`
+			}
+		})
 
 		// Prefix the path
 		options.path = path.join('/v2/service/', options.path)

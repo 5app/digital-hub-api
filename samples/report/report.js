@@ -29,24 +29,24 @@ transform(report, {
 	isoSub90: isoDateAdd(-90)
 })
 
+// Execute
+executeQuery(report).catch(e => console.log(e))
+
+
 // Grab the assets
-hub.api({
-	path: `api/${report.root}`,
-	qs: report.query
-})
-	.then(resp => {
+async function executeQuery(report) {
 
-		if (!(typeof resp === 'string' || resp instanceof Buffer)) {
-			resp = JSON.stringify(resp)
-		}
-
-		process.stdout.write(resp)
+	let resp = await hub.api({
+		path: `api/${report.root}`,
+		qs: report.query
 	})
-	.catch(resp => {
 
-		console.log(resp)
+	if (!(typeof resp === 'string' || resp instanceof Buffer)) {
+		resp = JSON.stringify(resp)
+	}
 
-	})
+	process.stdout.write(resp)
+}
 
 function isoDateAdd(days) {
 	const d = new Date()

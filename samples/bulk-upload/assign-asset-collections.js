@@ -21,7 +21,14 @@ const {
 	files
 } = require('./datafiles')
 
-files.reduce((promise, file) => promise.then(() => processFile(file)), Promise.resolve())
+// Loop through and process each file...
+asyncForEach(files, processFile)
+
+async function asyncForEach(a, callback) {
+	for (let i = 0, len = a.length; i < len; i++) {
+		await callback(a[i], i)
+	}
+}
 
 //
 // Process a CSV file
@@ -33,7 +40,7 @@ async function processFile(filePath) {
 	return new Promise(accept => {
 
 		// Parse the contents of the CSV file
-		const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
+		const parser = parse({delimiter: ',', columns, relax: true}, async(err, data) => {
 
 			if (err) {
 				console.error(err)
@@ -48,18 +55,22 @@ async function processFile(filePath) {
 				return
 			}
 
-			data.reduce((promise, record, index) =>
-				promise
-					.then(() => processRecord(record))
-					.then(() => {
+			try {
+				await asyncForEach(data, async(record, index) => {
+					try {
+						await processRecord(record)
 						console.log([index, 'CREATED'].join())
-					})
-					.catch(resp => {
-						console.log([index, 'ERROR', resp.error || resp.message].join())
-					}),
+					}
+					catch (e) {
+						console.log([index, 'ERROR', e.error || e.message].join())
+					}
+				})
+			}
+			catch (e) {
+				// Ignore
+			}
 
-			Promise.resolve()
-			).then(accept, accept)
+			accept()
 		})
 
 		fs.createReadStream(filePath).pipe(parser)
@@ -121,7 +132,7 @@ async function processRecord(record) {
 // Retrieve the asset using refid
 async function getCollectionAsset(filter) {
 
-	return api({
+	const resp = await api({
 		path: 'api/assetCollections',
 		qs: {
 			fields,
@@ -129,7 +140,8 @@ async function getCollectionAsset(filter) {
 			limit: 1
 		}
 	})
-		.then(resp => resp.data[0])
+
+	return resp.data[0]
 }
 
 
@@ -182,7 +194,7 @@ async function getAssetByRefId(refid) {
 		throw new Error('Missing reference')
 	}
 
-	return api({
+	const resp = await api({
 		path: 'api/assets',
 		qs: {
 			fields: ['id'],
@@ -196,10 +208,9 @@ async function getAssetByRefId(refid) {
 			console.error(err)
 			throw new Error(`Failed to retrieve the refid: ${refid}`)
 		})
-		.then(resp => {
-			if (resp.data.length) {
-				return resp.data[0]
-			}
-			throw new Error(`Cannot find asset refid: ${refid}`)
-		})
+
+	if (resp.data.length) {
+		return resp.data[0]
+	}
+	throw new Error(`Cannot find asset refid: ${refid}`)
 }

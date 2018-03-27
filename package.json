@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "API for interacting with a Digital Hub",
   "main": "src/api.js",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "scripts": {
     "lint": "eslint ./",
     "lint-fix": "eslint --fix ./",
@@ -31,6 +34,7 @@
     "dotenv": "^5.0.0",
     "eslint": "^4.11.0",
     "eslint-config-5app": "^0.1.0",
+    "eslint-plugin-promise": "^3.7.0",
     "mocha": "^5.0.0",
     "mockery": "^2.1.0",
     "nyc": "^11.3.0",

@@ -119,6 +119,7 @@ describe('Digital Hub API', () => {
 		catch (err) {
 			expect(err).to.be.an('error')
 			expect(err.message).to.eql('Missing property username, password')
+			return
 		}
 
 		throw new Error('should have failed')

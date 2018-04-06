@@ -43,7 +43,7 @@ describe('Digital Hub API', () => {
 		expect(hub).to.be.instanceof(Hub)
 	})
 
-	it('should trigger a request and append an auth token to the headers', done => {
+	it('should trigger a request and append an auth token to the headers', async() => {
 
 		const hub = new Hub({
 			tenant,
@@ -51,19 +51,15 @@ describe('Digital Hub API', () => {
 			password
 		})
 
-		hub.api({
+		const resp = await hub.api({
 			path: '/api'
 		})
-			.then(resp => {
-				expect(resp.headers).to.have.property('Authorization', 'Bearer token')
-				expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
-				done()
-			})
-			.catch(done)
 
+		expect(resp.headers).to.have.property('Authorization', 'Bearer token')
+		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
 	})
 
-	it('should throw an error when authentication fails', done => {
+	it('should throw an error when authentication fails', async() => {
 
 		const hub = new Hub({
 			username,
@@ -72,56 +68,64 @@ describe('Digital Hub API', () => {
 
 		hub.request = () => Promise.resolve({error: 'no token'})
 
-		hub.login({
-			path: '/api'
-		})
-			.then(done, err => {
-				expect(err).to.be.an('error')
-				expect(err.message).to.eql('Authentication failed')
-				done()
+		try {
+			await hub.login({
+				path: '/api'
 			})
-			.catch(done)
+		}
+		catch (err) {
+			expect(err).to.be.an('error')
+			expect(err.message).to.eql('Authentication failed')
+			return
+		}
 
+		throw new Error('should have failed')
 	})
 
-	it('should throw an error on request when tenant is not defined', done => {
+	it('should throw an error on request when tenant is not defined', async() => {
 
 		const hub = new Hub({
 			username,
 			password
 		})
 
-		hub.api({
-			path: '/api'
-		})
-			.then(done, err => {
-				expect(err).to.be.an('error')
-				expect(err.message).to.eql('Missing property tenant')
-				done()
+		try {
+			await hub.api({
+				path: '/api'
 			})
-			.catch(done)
+		}
+		catch (err) {
+			expect(err).to.be.an('error')
+			expect(err.message).to.eql('Missing property tenant')
+			return
+		}
+
+		throw new Error('should have failed')
 
 	})
 
-	it('should throw an error on request when username or password is not defined', done => {
+	it('should throw an error on request when username or password is not defined', async() => {
 
 		const hub = new Hub({
 			tenant,
 			username
 		})
 
-		hub.api({
-			path: '/api'
-		})
-			.then(done, err => {
-				expect(err).to.be.an('error')
-				expect(err.message).to.eql('Missing property username, password')
-				done()
+		try {
+			await hub.api({
+				path: '/api'
 			})
-			.catch(done)
+		}
+		catch (err) {
+			expect(err).to.be.an('error')
+			expect(err.message).to.eql('Missing property username, password')
+			return
+		}
+
+		throw new Error('should have failed')
 	})
 
-	it('should use the instance version of access_token', done => {
+	it('should use the instance version of access_token', async() => {
 
 		const hub = new Hub({
 			tenant,
@@ -131,17 +135,14 @@ describe('Digital Hub API', () => {
 
 		hub.access_token = 'inst_token'
 
-		hub.api({
+		const resp = await hub.api({
 			path: '/api'
 		})
-			.then(resp => {
-				expect(resp.headers).to.have.property('Authorization', 'Bearer inst_token')
-				done()
-			})
-			.catch(done)
+
+		expect(resp.headers).to.have.property('Authorization', 'Bearer inst_token')
 	})
 
-	it('should JSON.stringify objects in qs', done => {
+	it('should JSON.stringify objects in qs', async() => {
 
 		const hub = new Hub({
 			tenant,
@@ -153,21 +154,17 @@ describe('Digital Hub API', () => {
 			key: 'value'
 		}
 
-		hub.api({
+		const resp = await hub.api({
 			path: '/api',
 			qs: {
 				json,
 				a: 1
 			}
 		})
-			.then(resp => {
-				expect(resp.qs).to.have.property('json', '{"key":"value"}')
-				expect(resp.qs).to.have.property('a', 1)
-				expect(resp.qs).to.not.have.property('token')
-				expect(resp.qs).to.not.have.property('access_token')
-				done()
-			})
-			.catch(done)
 
+		expect(resp.qs).to.have.property('json', '{"key":"value"}')
+		expect(resp.qs).to.have.property('a', 1)
+		expect(resp.qs).to.not.have.property('token')
+		expect(resp.qs).to.not.have.property('access_token')
 	})
 })

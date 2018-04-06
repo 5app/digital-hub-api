@@ -57,7 +57,7 @@ module.exports = class Hub {
 		}
 
 		// Trigger the API request
-		return this.request({
+		const body = await this.request({
 			method: 'POST',
 			path: '/auth/login',
 			body: {
@@ -65,17 +65,17 @@ module.exports = class Hub {
 				password
 			}
 		})
-			.then(body => {
 
-				const token = body.access_token
-				this.access_token = token
+		// Capture and save the access_token from the response
+		const token = body.access_token
 
-				if (!token) {
-					throw new Error('Authentication failed')
-				}
+		this.access_token = token
 
-				return token
-			})
+		if (!token) {
+			throw new Error('Authentication failed')
+		}
+
+		return token
 	}
 
 	// Api
@@ -83,6 +83,8 @@ module.exports = class Hub {
 
 		// Get the token
 		const access_token = await this.login()
+
+		// Update headers in request to include Bearer Token
 		extend(options, {
 			headers: {
 				Authorization: `Bearer ${access_token}`

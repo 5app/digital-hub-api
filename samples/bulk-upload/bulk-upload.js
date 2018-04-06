@@ -60,7 +60,14 @@ const BASE_PATH = base
 
 // Iterate through the filepaths in the filelist
 // Triggering `processFile`
-files.reduce((promise, file) => promise.then(() => processFile(file)), Promise.resolve())
+// Loop through and process each file...
+asyncForEach(files, processFile)
+
+async function asyncForEach(a, callback) {
+	for (let i = 0, len = a.length; i < len; i++) {
+		await callback(a[i])
+	}
+}
 
 
 // Process a file
@@ -74,7 +81,7 @@ async function processFile(file) {
 	return new Promise(accept => {
 
 		// Parse the contents of the CSV file
-		const parser = parse({delimiter: ',', columns, relax: true}, (err, data) => {
+		const parser = parse({delimiter: ',', columns, relax: true}, async(err, data) => {
 
 			// Cancel if there was an error parsing the document
 			if (err) {
@@ -93,15 +100,29 @@ async function processFile(file) {
 			console.log(`Processing ${data.length} records`)
 
 			// Run through the entries
-			const promise = data.reduce((promise, record) => promise.then(() => processRecord(record))
-				.then(resp => ([resp.refid, resp.action, (resp.messages || []).join(' - ')]))
-				.catch(err => {
-					return [record.refid, 'ERROR', err.toString()]
-				})
-				.then(fields => console.log(fields.map(csvCell).join(',')))
-				, Promise.resolve())
+			try {
+				await asyncForEach(data, async record => {
 
-			promise.then(accept, accept)
+					let fields = []
+
+					try {
+						const resp = await processRecord(record)
+						fields = [resp.refid, resp.action, (resp.messages || []).join(' - ')]
+					}
+					catch (err) {
+						fields = [record.refid, 'ERROR', err.toString()]
+					}
+
+					console.log(fields.map(csvCell).join(','))
+
+				})
+			}
+			catch (e) {
+				// Ignore
+			}
+
+			// Continue
+			accept()
 		})
 
 		// Stream file...
@@ -249,7 +270,7 @@ async function getAssetByRefId(refid) {
 		throw new Error('Missing reference')
 	}
 
-	return api({
+	const resp = await api({
 		path: 'api/assets',
 		qs: {
 			fields,
@@ -259,7 +280,8 @@ async function getAssetByRefId(refid) {
 			limit: 1
 		}
 	})
-		.then(resp => resp.data[0])
+
+	return resp.data[0]
 }
 
 // Create an asset record

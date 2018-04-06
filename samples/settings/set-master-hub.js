@@ -22,17 +22,20 @@ if (!parent_id || typeof parent_id !== 'number') {
 	throw new Error('Parent_id is invalid')
 }
 
+// Set master hub
+setMasterHub(parent_id).catch(e => console.log(e))
+
+
 // Grab the assets
-hub.api({
-	path: 'api/domains/self',
-	method: 'patch',
-	body: {
-		parent_id
-	}
-})
-	.then(resp => {
-		console.log(resp)
+async function setMasterHub(parent_id) {
+	const resp = await hub.api({
+		path: 'api/domains/self',
+		method: 'patch',
+		body: {
+			parent_id
+		}
 	})
-	.catch(resp => {
-		console.log(resp)
-	})
+
+	console.log(resp)
+}
+

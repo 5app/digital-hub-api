@@ -52,7 +52,7 @@ describe('Digital Hub API', () => {
 		})
 
 		const resp = await hub.api({
-			path: '/api'
+			path: 'api'
 		})
 
 		expect(resp.headers).to.have.property('Authorization', 'Bearer token')
@@ -70,7 +70,7 @@ describe('Digital Hub API', () => {
 
 		try {
 			await hub.login({
-				path: '/api'
+				path: 'api'
 			})
 		}
 		catch (err) {
@@ -91,7 +91,7 @@ describe('Digital Hub API', () => {
 
 		try {
 			await hub.api({
-				path: '/api'
+				path: 'api'
 			})
 		}
 		catch (err) {
@@ -113,7 +113,7 @@ describe('Digital Hub API', () => {
 
 		try {
 			await hub.api({
-				path: '/api'
+				path: 'api'
 			})
 		}
 		catch (err) {
@@ -136,7 +136,7 @@ describe('Digital Hub API', () => {
 		hub.access_token = 'inst_token'
 
 		const resp = await hub.api({
-			path: '/api'
+			path: 'api'
 		})
 
 		expect(resp.headers).to.have.property('Authorization', 'Bearer inst_token')
@@ -155,7 +155,7 @@ describe('Digital Hub API', () => {
 		}
 
 		const resp = await hub.api({
-			path: '/api',
+			path: 'api',
 			qs: {
 				json,
 				a: 1
@@ -167,4 +167,22 @@ describe('Digital Hub API', () => {
 		expect(resp.qs).to.not.have.property('token')
 		expect(resp.qs).to.not.have.property('access_token')
 	})
+
+
+	it('should route complete paths, when prefixed with `/`', async() => {
+
+		const hub = new Hub({
+			tenant,
+			username,
+			password
+		})
+
+		const resp = await hub.api({
+			path: '/v2/service/api'
+		})
+
+		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
+	})
+
+
 })

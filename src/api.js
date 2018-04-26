@@ -1,6 +1,6 @@
 const request = require('request-promise-native')
 const extend = require('tricks/object/extend')
-const path = require('path')
+const URL = require('url')
 
 module.exports = class Hub {
 
@@ -19,7 +19,8 @@ module.exports = class Hub {
 			throw new Error('Missing property tenant')
 		}
 
-		const uri = `https://${path.join(this.options.tenant, options.path)}`
+		const uri = URL.resolve(`https://${this.options.tenant}`, options.path)
+
 		options.uri = uri
 		options.json = true
 		options.rejectUnauthorized = false
@@ -92,7 +93,7 @@ module.exports = class Hub {
 		})
 
 		// Prefix the path
-		options.path = path.join('/v2/service/', options.path)
+		options.path = URL.resolve('/v2/service/', options.path)
 
 		// Trigger the request...
 		return this.request(options)

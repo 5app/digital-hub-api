@@ -9,14 +9,16 @@ before(() => {
 		useCleanCache: true
 	})
 
-	mockery.registerMock('request-promise-native', opts => {
+	mockery.registerMock('request-promise-native', async opts => {
 
-		!opts.json && console.log(ops);
+		if (!opts.json) {
+			return JSON.stringify(opts)
+		}
 
 		if (opts.uri.match('/auth/login')) {
 			opts.access_token = 'token'
 		}
-		return Promise.resolve(opts)
+		return opts
 	})
 
 	Hub = require('../../src/api')
@@ -197,12 +199,11 @@ describe('Digital Hub API', () => {
 
 		const resp = await hub.api({
 			path: '/v2/service/picture',
-			json: false
+			json: false,
+			resolveWithFullResponse: true
 		})
 
-		console.log(resp);
-
-		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
+		expect(resp).to.be.a('string')
 	})
 
 })

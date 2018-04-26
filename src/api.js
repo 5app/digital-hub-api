@@ -22,7 +22,11 @@ module.exports = class Hub {
 		const uri = URL.resolve(`https://${this.options.tenant}`, options.path)
 
 		options.uri = uri
-		options.json = true
+
+		if (!('json' in options)) {
+			options.json = true
+		}
+
 		options.rejectUnauthorized = false
 
 		{

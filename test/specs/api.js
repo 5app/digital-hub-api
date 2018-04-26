@@ -11,6 +11,8 @@ before(() => {
 
 	mockery.registerMock('request-promise-native', opts => {
 
+		!opts.json && console.log(ops);
+
 		if (opts.uri.match('/auth/login')) {
 			opts.access_token = 'token'
 		}
@@ -184,5 +186,23 @@ describe('Digital Hub API', () => {
 		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
 	})
 
+
+	it('should let options.json be overideable', async() => {
+
+		const hub = new Hub({
+			tenant,
+			username,
+			password
+		})
+
+		const resp = await hub.api({
+			path: '/v2/service/picture',
+			json: false
+		})
+
+		console.log(resp);
+
+		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
+	})
 
 })

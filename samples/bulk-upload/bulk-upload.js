@@ -462,6 +462,9 @@ function formatPatch(patch) {
 		else if (x === 'completion_time') {
 			patch[x] = formatTime(patch[x])
 		}
+		else if (x === 'collection_type') {
+			patch[x] = formatValue(patch[x].toLowerCase())
+		}
 		else {
 			patch[x] = formatValue(patch[x])
 		}

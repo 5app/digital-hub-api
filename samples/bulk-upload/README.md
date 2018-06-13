@@ -40,7 +40,7 @@ This is a file which contains...
 | Status       | DELETE | If this is set and the value is "DELETE" the item will be removed. No other fields are required if this is given
 | Name *       | String, 2048 bytes, UTF8  | Name of asset
 | Description  | String, 64 KB | Description of the asset, summary of the content
-| Type *       | web, upload, folder, zip or collection  | (See Asset Types)[#asset-types]
+| Type *       | web, upload, folder, zip, section or collection  | (See Asset Types)[#asset-types]
 | ParentRefID  | String or Number | Reference to the parent folder of this asset or folder
 | Tags         | String | Use comma’s to separate multiple tags..
 | ThumbnailPath | Relative String or URL | Either **Relative path:** to the script being processed, e.g. thumbnails/my.png OR a **Full URL:** A URL to the image e.g. https://myserver/images/1337.jpg
@@ -56,10 +56,11 @@ This is a file which contains...
 
 | Type | Description
 |------|---------------------
-| Web  | Is for URL addresses
-| Upload | Is for files hosted on 5app platform
-| Folder | is a type of asset used to form a directory
-| Collection | Is another type of asset which is used to reference a collection
+| web  | Is for URL addresses
+| upload | Is for files hosted on 5app platform
+| folder | is a type of asset used to form a directory
+| collection | Is a specific type of asset known as a collection, and is used for creating playlists
+| section | Is used to break up a series of assets within a playlist
 
 
 

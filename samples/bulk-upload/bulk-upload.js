@@ -143,7 +143,7 @@ async function processRecord(record) {
 		thumbnailpath,
 		path,
 		status,
-		collectiontype, // eslint-disable-line no-unused
+		collectiontype, // eslint-disable-line no-unused-vars
 		...patch
 	} = record
 

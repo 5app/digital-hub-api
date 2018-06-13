@@ -1,9 +1,8 @@
 root: collectionAsset
 query:
     fields:
-        'Collection ID': 'id'
-        'Collection Name': 'name'
-        'Collection Type': 'collection_type'
+        'Playlist ID': 'id'
+        'Playlist Name': 'name'
         'Teams': 'GROUP_CONCAT(DISTINCT appGroups.groups.name)'
         'Updated': 'DATE(updated_time)'
         'Created': 'DATE(created_time)'

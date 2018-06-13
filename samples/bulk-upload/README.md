@@ -50,7 +50,6 @@ This is a file which contains...
 | DisableDownload | Boolean     | If the asset is a file, this flag if false will present the user with an optional button allowing them to download the content to their device.
 | MimeType     | String, E.g. video/webm | If this is not present this will be automatically assigned
 | CompletionTime | Number | Length of time to consume the asset in minutes.
-| CollectionType | “Playlist” or “Collection”
 
 
 ## Asset Types

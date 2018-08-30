@@ -1,8 +1,8 @@
 /*eslint no-console: "off"*/
 
 const Hub = require('../../../src/api')
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
 const env = process.env
 
@@ -34,6 +34,6 @@ async function setEmailTemplate(body) {
 
 	console.log(resp)
 
-	return resp;
+	return resp
 }
 

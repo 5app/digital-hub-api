@@ -13,7 +13,7 @@ const hub = new Hub({
 	password: env.DH_PASSWORD
 })
 
-// Set master hub
+// Set the newUser template
 setEmailTemplate({
 	body: fs.readFileSync(path.join(__dirname, 'sampleTemplate.yml')).toString(),
 	from: 'notification@5app.com',
@@ -23,7 +23,7 @@ setEmailTemplate({
 }).catch(e => console.log(e))
 
 
-// Grab the assets
+// Post the email template
 async function setEmailTemplate(body) {
 
 	const resp = await hub.api({

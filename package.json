@@ -1,5 +1,6 @@
 {
   "name": "digital-hub-api",
+  "private": true,
   "version": "0.0.1",
   "description": "API for interacting with a Digital Hub",
   "main": "src/api.js",

@@ -34,6 +34,9 @@ async function getViewerUrls(aud = '') {
 				'name',
 				'viewerUrl'
 			],
+			filter: {
+				type: ['upload', 'web', 'zip']
+			},
 			limit: 100,
 			aud
 		}

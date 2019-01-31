@@ -1,13 +1,13 @@
 // Get an instance of the Hub Api
 const api = require('./api.js')
 
-async function addUsers({users, teams, forbiddenTeams = []}) {
+async function addUsers({users, teams}) {
 	if (!users.length) {
 		return null // Nothing to do
 	}
 
 	// Create accounts by email
-	const emails = users.map(user => user.emailAddress)
+	const emails = users.map(user => user.email)
 	const {success: newlyCreatedUsers, exist: existentUsers} = await api({
 		method: 'post',
 		path: 'addUsers',
@@ -29,7 +29,7 @@ async function addUsers({users, teams, forbiddenTeams = []}) {
 	})
 
 	const usersWithIds = users.map(user => {
-		const {id, isNew} = userIds[user.emailAddress]
+		const {id, isNew} = userIds[user.email]
 
 		return {
 			...user,
@@ -39,25 +39,13 @@ async function addUsers({users, teams, forbiddenTeams = []}) {
 	})
 
 	// Add the user to the right groups and create a profile for new users
-	const forbiddenTeamUsers = {}
-
 	for (const user of usersWithIds) {
-		const {id, isNew, firstName, lastName, jobFamilyTeam, fullJobTitleTeam, countryTeam, emailAddress} = user
-		const allUserTeams = [jobFamilyTeam, fullJobTitleTeam, countryTeam].map(team => team.toLowerCase())
-		const teamsToAdd = []
-
-		allUserTeams.forEach(team => {
-			if (forbiddenTeams.includes(team)) {
-				forbiddenTeamUsers[team] = forbiddenTeamUsers[team] || []
-				forbiddenTeamUsers[team].push(emailAddress)
-			}
-			else {
-				teamsToAdd.push(teams[team].name)
-			}
-		})
+		const {id, isNew, firstName, lastName, email, teams: userTeams} = user
+		const normalisedTeamNames = userTeams.map(team => team.toLowerCase())
+		const teamsToAdd = normalisedTeamNames.map(team => teams[team].name)
 
 		const updatePayload = {
-			name: emailAddress, // this is mandatory
+			name: email, // this is mandatory
 			groups: JSON.stringify(teamsToAdd), // the API expects a JSON instead of an Array
 			updateGroups: true,
 		}
@@ -89,10 +77,7 @@ async function addUsers({users, teams, forbiddenTeams = []}) {
 		})
 	}
 
-	return {
-		forbiddenTeamUsers,
-		updatedUsers: usersWithIds,
-	}
+	return usersWithIds
 }
 
 module.exports = addUsers

@@ -3,40 +3,60 @@
 
 const addUsers = require('./addUsers')
 const readJson = require('./readJson')
-const validateUserData = require('./validateUserData')
+const extractUserData = require('./extractUserData')
 const findOrCreateDomainTeams = require('./findOrCreateDomainTeams')
 
 const forbiddenTeams = ['admin'] // you need to add users manually through the UI for these teams
 
 async function importUsers({usersFilePath}) {
 	// Read the users' JSON file and extract the list of users
-	const users = await readJson(usersFilePath)
+	const rawUserData = await readJson(usersFilePath)
 
-	// Validate user data
-	validateUserData({users})
+	// Sanitise user data
+	const users = extractUserData({rawUserData, forbiddenTeams})
+
+	if (!users.length) {
+		return
+	}
 
 	// Get the list of all teams
-	const teams = await findOrCreateDomainTeams({users, forbiddenTeams})
+	const teams = await findOrCreateDomainTeams({users})
 
 	// Create users
-	const {forbiddenTeamUsers, updatedUsers} = await addUsers({users, teams, forbiddenTeams})
+	const updatedUsers = await addUsers({users, teams})
 
 	// Summary
+	console.log('------------- Summary -------------')
 	const newTeams = Object.values(teams).filter(team => team.isNew).map(team => team.name)
-	const newAccounts = updatedUsers.filter(user => user.isNew).map(user => user.emailAddress)
-	const updatedAccounts = updatedUsers.filter(user => !user.isNew).map(user => user.emailAddress)
+	const {created, updated} = updatedUsers.reduce((accounts, user) => {
+		const collection = user.isNew ? accounts.created : accounts.updated
+		collection.push(user.email)
+		return accounts
+	}, {created: [], updated: []})
 
-	console.log('Newly added teams:')
-	console.log(newTeams)
+	if (newTeams.length) {
+		console.log('Newly added teams:')
+		console.log(newTeams)
+	}
+	else {
+		console.log('No new team was created!')
+	}
 
-	console.log('Newly added user accounts:')
-	console.log(newAccounts)
+	if (created.length) {
+		console.log('Newly added user accounts:')
+		console.log(created)
+	}
+	else {
+		console.log('No new user account was created!')
+	}
 
-	console.log('User accounts with updated groups:')
-	console.log(updatedAccounts)
-
-	console.log('User accounts that need to be manually added (forbidden teams):')
-	console.log(forbiddenTeamUsers)
+	if (updated.length) {
+		console.log('User accounts with updated groups:')
+		console.log(updated)
+	}
+	else {
+		console.log('No user account was updated!')
+	}
 }
 
 const usersFilePath = process.argv[2]

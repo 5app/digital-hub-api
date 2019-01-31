@@ -1,17 +1,15 @@
 // Get an instance of the Hub Api
 const api = require('./api.js')
 
-async function findOrCreateDomainTeams({users, forbiddenTeams = []}) {
+async function findOrCreateDomainTeams({users}) {
 	// Get users' teams
-	const uniqueTeams = new Set()
+	const teams = []
 
-	users.forEach(({jobFamilyTeam, fullJobTitleTeam, countryTeam}) => {
-		uniqueTeams.add(jobFamilyTeam.trim())
-		uniqueTeams.add(fullJobTitleTeam.trim())
-		uniqueTeams.add(countryTeam.trim())
+	users.forEach(user => {
+		teams.push(...user.teams)
 	})
 
-	const teams = [...uniqueTeams]
+	const uniqueTeams = [...new Set(teams)]
 
 	// Get the list of all known teams from the the DB
 	const {data: domainTeams} = await api({
@@ -21,7 +19,7 @@ async function findOrCreateDomainTeams({users, forbiddenTeams = []}) {
 		}
 	})
 
-	// Generate a map of team names for quicker searches/filtering
+	// Generate a map of existent team names for quicker searches/filtering
 	const allTeams = domainTeams.reduce((teamsMap, team) => {
 		teamsMap[team.name.toLowerCase()] = {
 			name: team.name,
@@ -34,11 +32,11 @@ async function findOrCreateDomainTeams({users, forbiddenTeams = []}) {
 
 	// Get the list of teams that we need to create (unknown teams)
 	// const allTeamNames = teams.map(name => name.toLowerCase());
-	const toBeCreated = teams
+	const toBeCreated = uniqueTeams
 		.filter(teamName => {
 			const name = teamName.toLowerCase()
 
-			return name && !allTeams[name] && !forbiddenTeams.includes(name)
+			return name && !allTeams[name]
 		})
 
 	// Create the new teams

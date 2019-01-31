@@ -1,6 +1,6 @@
 # Import users
 
-Takes a users' JSON file as an input and create accounts for them.
+> Takes a users' JSON file as an input and creates accounts for them.
 
 ## Importing users
 To run the script and import users, please execute the command `./import-users.js users.json` where `users.json` is the the file containing the details for the users to import (see below for an example).

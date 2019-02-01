@@ -80,7 +80,7 @@ async function processFile(file) {
 	return new Promise(accept => {
 
 		// Parse the contents of the CSV file
-		const parser = parse({delimiter: ',', columns, relax: true}, async(err, data) => {
+		const parser = parse({delimiter: ',', columns, relax: true}, async (err, data) => {
 
 			// Cancel if there was an error parsing the document
 			if (err) {

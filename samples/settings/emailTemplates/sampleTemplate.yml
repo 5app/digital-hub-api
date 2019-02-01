@@ -1,0 +1,21 @@
+---
+linkText: "Get Started"
+title: "Welcome to the {{domain.pageTitle}}"
+signature: "Thanks\nThe {{domain.pageTitle}} Team"
+footer: "{{#if content.issuer}}This email was sent to you by {{content.issuer}}<br />{{/if}}
+<a href=\"{{{domain.origin}}}\">{{domain.pageTitle}}</a>"
+---
+
+## SAMPLE TEMPLATE 
+
+Hi {{#if recipient.name}}{{recipient.name}}!{{/if}}
+
+Your company has created a new Digital Hub at {{domain.origin}} and you've been invited to join.
+
+{{#if content.link}}
+Please <a href="{{{content.link}}}">click here to confirm your email address</a> and get started. Once your account is confirmed, you can log in using your email address {{recipient.email}}
+{{else}}
+Please log into the {{domain.pageTitle}} with your email address {{recipient.email}} and your existing Learning Hub account password.
+{{/if}}
+
+Thanks!

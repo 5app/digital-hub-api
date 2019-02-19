@@ -30,18 +30,18 @@
   },
   "homepage": "https://github.com/5app/digital-hub-api#readme",
   "dependencies": {
-    "request": "^2.87.0",
-    "request-promise-native": "^1.0.5",
-    "tricks": "^1.7.3"
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "tricks": "^1.9.3"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
+    "chai": "^4.2.0",
     "coveralls": "^3.0.2",
-    "csv-parse": "^4.3.2",
-    "dotenv": "^6.0.0",
-    "eslint": "^5.5.0",
+    "csv-parse": "^4.3.3",
+    "dotenv": "^6.2.0",
+    "eslint": "^5.14.1",
     "eslint-config-5app": "^0.3.0",
-    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-promise": "^4.0.1",
     "mocha": "^6.0.0",
     "mockery": "^2.1.0",
     "nyc": "^13.0.1",

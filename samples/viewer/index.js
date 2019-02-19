@@ -27,7 +27,7 @@ getViewerUrls(aud).catch(e => console.log(e))
 // Function to get the Viewer Links
 async function getViewerUrls(aud = '') {
 	const resp = await hub.api({
-		path: 'api/assets',
+		path: 'api/commonAsset',
 		qs: {
 			fields: [
 				'id',

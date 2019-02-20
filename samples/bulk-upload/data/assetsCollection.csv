@@ -1,4 +1,4 @@
 AssetRefId,CollectionRefId,Rank
-my-link,my-collection,1
-my-section,my-collection,2
-my-video,my-collection,3
+my-link,my-playlist,1
+my-section,my-playlist,2
+my-video,my-playlist,3

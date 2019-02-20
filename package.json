@@ -1,6 +1,6 @@
 {
   "name": "@5app/digital-hub-api",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "API for interacting with a Digital Hub",
   "main": "src/api.js",
   "engines": {

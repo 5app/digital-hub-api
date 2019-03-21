@@ -26,21 +26,30 @@ getViewerUrls(aud).catch(e => console.log(e))
 
 // Function to get the Viewer Links
 async function getViewerUrls(aud = '') {
-	const resp = await hub.api({
+	const {data} = await hub.api({
 		path: 'api/commonAsset',
 		qs: {
 			fields: [
 				'id',
 				'name',
+				'type',
 				'viewerUrl'
 			],
 			filter: {
 				type: ['upload', 'web', 'zip']
 			},
-			limit: 100,
+			limit: 10000,
 			aud
 		}
 	})
 
-	console.log(resp)
+	console.log(toCSV(Object.keys(data[0])))
+
+	data.forEach(item => {
+		console.log(toCSV(Object.values(item)))
+	})
+}
+
+function toCSV(array) {
+	return array.map(item => (typeof item === 'string' ? `"${item.replace('"', '""')}"` : item)).join()
 }

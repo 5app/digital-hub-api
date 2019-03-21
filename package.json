@@ -40,7 +40,7 @@
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
     "csv-parse": "^4.3.3",
-    "dotenv": "^6.2.0",
+    "dotenv": "^7.0.0",
     "eslint": "^5.14.1",
     "eslint-config-5app": "^0.3.0",
     "eslint-plugin-promise": "^4.0.1",

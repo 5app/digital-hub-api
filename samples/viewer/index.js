@@ -46,6 +46,10 @@ async function getViewerUrls(aud = '') {
 	console.log(toCSV(Object.keys(data[0])))
 
 	data.forEach(item => {
+		// Update the viewerURL path
+		if (item.viewerUrl) {
+			item.viewerUrl = `https://${DH_TENANT}${item.viewerUrl}`
+		}
 		console.log(toCSV(Object.values(item)))
 	})
 }

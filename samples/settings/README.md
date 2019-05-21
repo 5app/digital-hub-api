@@ -3,8 +3,8 @@
 Here are examples of configuring a Digital Hub
 
 
-# Setting the master hub
+# Setting a child hub
 
 ```bash
-node -r dotenv/config settings/set-master-hub [master_domain_id]
+node -r dotenv/config settings/set-child-hub [child_domain_id]
 ```

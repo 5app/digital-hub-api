@@ -16,23 +16,23 @@ const hub = new Hub({
 })
 
 // Select a report
-const parent_id = +process.argv.slice(2)
+const child_domain_id = +process.argv.slice(2)
 
-if (!parent_id || typeof parent_id !== 'number') {
-	throw new Error('Parent_id is invalid')
+if (!child_domain_id || typeof child_domain_id !== 'number') {
+	throw new Error('child_domain_id is invalid')
 }
 
-// Set master hub
-setMasterHub(parent_id).catch(e => console.log(e))
+// Set child hub
+setChildHub(child_domain_id).catch(e => console.log(e))
 
 
 // Grab the assets
-async function setMasterHub(parent_id) {
+async function setChildHub(child_domain_id) {
 	const resp = await hub.api({
-		path: 'api/domains/self',
-		method: 'patch',
+		path: 'api/domainRelationships',
+		method: 'post',
 		body: {
-			parent_id
+			child_domain_id
 		}
 	})
 

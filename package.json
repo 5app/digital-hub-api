@@ -48,7 +48,7 @@
     "mockery": "^2.1.0",
     "nyc": "13.2.0",
     "pre-commit": "^1.2.2",
-    "validator": "^10.11.0",
+    "validator": "^11.0.0",
     "yamljs": "^0.3.0"
   }
 }

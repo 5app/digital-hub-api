@@ -14,10 +14,11 @@ jobs:
           root: ~/repo
           paths:
             - . 
-  build:
+  test:
     <<: *defaults
     steps:
-      - checkout
+      - attach_workspace:
+          at: ~/repo
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
@@ -48,7 +49,7 @@ workflows:
   build:
     jobs:
       - checkout_code
-      - build:
+      - test:
           requires:
             - checkout_code
       - release:

@@ -11,6 +11,7 @@
     "lint-fix": "eslint --fix ./",
     "test": "npm run lint && npm run spec && (nyc report --reporter=text-lcov | coveralls)",
     "spec": "nyc mocha ./test/specs/**.js",
+    "semantic-release": "semantic-release",
     "precommit-msg": "echo 'Running pre-commit checks... (skip using --no-verify)' && exit 0"
   },
   "pre-commit": [
@@ -37,6 +38,8 @@
     "tricks": "^1.11.1"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^3.0.2",
+    "@semantic-release/git": "^7.0.8",
     "chai": "^4.2.0",
     "coveralls": "^3.0.3",
     "csv-parse": "^4.4.1",
@@ -48,7 +51,30 @@
     "mockery": "^2.1.0",
     "nyc": "13.2.0",
     "pre-commit": "^1.2.2",
+    "semantic-release": "^15.13.12",
     "validator": "^10.11.0",
     "yamljs": "^0.3.0"
+  },
+  "release": {
+    "branch": "master",
+    "prepare": [
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      {
+        "path": "@semantic-release/git",
+        "assets": [
+          "package.json",
+          "package-lock.json",
+          "CHANGELOG.md"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
   }
 }

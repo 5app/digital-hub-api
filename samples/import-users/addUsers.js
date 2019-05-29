@@ -55,6 +55,7 @@ async function addUsers({users, teams}) {
 			updatePayload.last_name = lastName
 		}
 
+		// eslint-disable-next-line no-await-in-loop
 		await api({
 			method: 'put',
 			path: `users/${id}`,

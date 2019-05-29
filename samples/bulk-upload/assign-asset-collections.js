@@ -26,6 +26,7 @@ asyncForEach(files, processFile)
 
 async function asyncForEach(a, callback) {
 	for (let i = 0, len = a.length; i < len; i++) {
+		// eslint-disable-next-line no-await-in-loop
 		await callback(a[i], i)
 	}
 }

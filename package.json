@@ -35,24 +35,24 @@
   "dependencies": {
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "tricks": "^1.11.1"
+    "tricks": "^1.12.0"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^3.0.2",
-    "@semantic-release/git": "^7.0.8",
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.14",
     "chai": "^4.2.0",
-    "coveralls": "^3.0.3",
-    "csv-parse": "^4.4.1",
+    "coveralls": "^3.0.4",
+    "csv-parse": "^4.4.3",
     "dotenv": "^8.0.0",
     "eslint": "^6.0.0",
     "eslint-config-5app": "^0.6.2",
-    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-promise": "^4.2.1",
     "mocha": "^6.1.2",
     "mockery": "^2.1.0",
     "nyc": "13.2.0",
     "pre-commit": "^1.2.2",
-    "semantic-release": "^15.13.12",
-    "validator": "^10.11.0",
+    "semantic-release": "^15.13.18",
+    "validator": "^11.0.0",
     "yamljs": "^0.3.0"
   },
   "release": {

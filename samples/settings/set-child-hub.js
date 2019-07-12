@@ -1,5 +1,13 @@
 /*eslint no-console: "off"*/
 
+/**
+ * Set a child hub to the current hub
+ *
+ * @example
+ *
+ * node -r dotenv/config settings/set-child-hub.js childhub.5app.com
+ */
+
 const Hub = require('../../src/api')
 
 const {
@@ -16,18 +24,26 @@ const hub = new Hub({
 })
 
 // Select a report
-const child_domain_id = +process.argv.slice(2)
+const child_domain = process.argv.slice(2)[0]
 
-if (!child_domain_id || typeof child_domain_id !== 'number') {
-	throw new Error('child_domain_id is invalid')
+const child = new Hub({
+	tenant: child_domain,
+	username: DH_USERNAME,
+	password: DH_PASSWORD
+})
+
+async function init() {
+
+	// Get the child hub domain id
+	const child_domain_id = await getChildDomainId()
+
+	// Set child hub
+	await setChildHub(child_domain_id)
 }
-
-// Set child hub
-setChildHub(child_domain_id).catch(e => console.log(e))
-
 
 // Grab the assets
 async function setChildHub(child_domain_id) {
+
 	const resp = await hub.api({
 		path: 'api/domainRelationships',
 		method: 'post',
@@ -38,4 +54,18 @@ async function setChildHub(child_domain_id) {
 
 	console.log(resp)
 }
+
+async function getChildDomainId() {
+	const {id} = await child.api({
+		path: 'api/domains/self',
+		qs: {
+			fields: ['id']
+		}
+	})
+
+	return id
+}
+
+
+init().catch(e => console.error(e))
 

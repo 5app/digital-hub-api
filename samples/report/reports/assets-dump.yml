@@ -13,7 +13,6 @@ query:
       'Open In IFrame': 'openInIFrame'
       'Disable Download': 'disableDownload'
       'Completion Time': 'completion_time'
-      'Collection Type': 'collection_type'
     format: csv
     limit: 100
     filter:

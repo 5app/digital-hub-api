@@ -3,8 +3,8 @@ query:
     fields:
       'User Name': 'user.name'
       'User ID': 'user.id'
-      'Collection Name': 'collectionAsset.name'
-      'Collection ID': 'collectionAsset.id'
+      'Playlist Name': 'collectionAsset.name'
+      'Playlist ID': 'collectionAsset.id'
       'Progress': 'completion_rate'
       'Recommendation or User initiated': 'type'
       'Unpinned': 'is_deleted'

@@ -42,7 +42,6 @@ const fields = [
 	'openiniframe',
 	'disabledownload',
 	'mime_type',
-	'collection_type',
 	'completion_time',
 	'weburl',
 	'refid'
@@ -65,6 +64,7 @@ asyncForEach(files, processFile)
 
 async function asyncForEach(a, callback) {
 	for (let i = 0, len = a.length; i < len; i++) {
+		// eslint-disable-next-line no-await-in-loop
 		await callback(a[i])
 	}
 }
@@ -81,7 +81,7 @@ async function processFile(file) {
 	return new Promise(accept => {
 
 		// Parse the contents of the CSV file
-		const parser = parse({delimiter: ',', columns, relax: true}, async(err, data) => {
+		const parser = parse({delimiter: ',', columns, relax: true}, async (err, data) => {
 
 			// Cancel if there was an error parsing the document
 			if (err) {
@@ -137,7 +137,6 @@ async function processFile(file) {
 // Making requests to functions to store the data
 async function processRecord(record) {
 
-	// Name;Description;Type;RefID;ParentRefID;Tags;ThumbnailPath;WebURL;OpenInIFrame;Path;DisableDownload;MimeType;CompletionTime;CollectionType
 	const {
 		refid,
 		parentrefid,
@@ -145,6 +144,7 @@ async function processRecord(record) {
 		thumbnailpath,
 		path,
 		status,
+		collectiontype, // eslint-disable-line no-unused-vars
 		...patch
 	} = record
 
@@ -449,8 +449,7 @@ async function getTagIds(tags) {
 function columnMapper(name) {
 	return {
 		mimetype: 'mime_type',
-		completiontime: 'completion_time',
-		collectiontype: 'collection_type'
+		completiontime: 'completion_time'
 	}[name] || name
 }
 
@@ -461,9 +460,6 @@ function formatPatch(patch) {
 		}
 		else if (x === 'completion_time') {
 			patch[x] = formatTime(patch[x])
-		}
-		else if (x === 'collection_type') {
-			patch[x] = formatValue(patch[x].toLowerCase())
 		}
 		else {
 			patch[x] = formatValue(patch[x])

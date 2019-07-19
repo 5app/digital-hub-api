@@ -10,4 +10,4 @@ query:
     filter:
       -type:
         - 'folder'
-        - 'collection'
+        - 'playlist'

@@ -26,6 +26,7 @@ asyncForEach(files, processFile)
 
 async function asyncForEach(a, callback) {
 	for (let i = 0, len = a.length; i < len; i++) {
+		// eslint-disable-next-line no-await-in-loop
 		await callback(a[i], i)
 	}
 }
@@ -40,7 +41,7 @@ async function processFile(filePath) {
 	return new Promise(accept => {
 
 		// Parse the contents of the CSV file
-		const parser = parse({delimiter: ',', columns, relax: true}, async(err, data) => {
+		const parser = parse({delimiter: ',', columns, relax: true}, async (err, data) => {
 
 			if (err) {
 				console.error(err)
@@ -56,7 +57,7 @@ async function processFile(filePath) {
 			}
 
 			try {
-				await asyncForEach(data, async(record, index) => {
+				await asyncForEach(data, async (record, index) => {
 					try {
 						await processRecord(record)
 						console.log([index, 'CREATED'].join())

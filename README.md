@@ -19,7 +19,7 @@ The [samples folder](./samples) highlights how the API can be used to automate a
 Create an instance of the hub
 
 ```javascript
-const Hub = require('digital-hub-api');
+const Hub = require('@5app/digital-hub-api');
 ```
 
 ## constructor

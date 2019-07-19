@@ -47,7 +47,7 @@ describe('Digital Hub API', () => {
 		expect(hub).to.be.instanceof(Hub)
 	})
 
-	it('should trigger a request and append an auth token to the headers', async() => {
+	it('should trigger a request and append an auth token to the headers', async () => {
 
 		const hub = new Hub({
 			tenant,
@@ -63,7 +63,7 @@ describe('Digital Hub API', () => {
 		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
 	})
 
-	it('should throw an error when authentication fails', async() => {
+	it('should throw an error when authentication fails', async () => {
 
 		const hub = new Hub({
 			username,
@@ -86,7 +86,7 @@ describe('Digital Hub API', () => {
 		throw new Error('should have failed')
 	})
 
-	it('should throw an error on request when tenant is not defined', async() => {
+	it('should throw an error on request when tenant is not defined', async () => {
 
 		const hub = new Hub({
 			username,
@@ -108,7 +108,7 @@ describe('Digital Hub API', () => {
 
 	})
 
-	it('should throw an error on request when username or password is not defined', async() => {
+	it('should throw an error on request when username or password is not defined', async () => {
 
 		const hub = new Hub({
 			tenant,
@@ -129,7 +129,7 @@ describe('Digital Hub API', () => {
 		throw new Error('should have failed')
 	})
 
-	it('should use the instance version of access_token', async() => {
+	it('should use the instance version of access_token', async () => {
 
 		const hub = new Hub({
 			tenant,
@@ -146,7 +146,7 @@ describe('Digital Hub API', () => {
 		expect(resp.headers).to.have.property('Authorization', 'Bearer inst_token')
 	})
 
-	it('should JSON.stringify objects in qs', async() => {
+	it('should JSON.stringify objects in qs', async () => {
 
 		const hub = new Hub({
 			tenant,
@@ -173,7 +173,7 @@ describe('Digital Hub API', () => {
 	})
 
 
-	it('should route complete paths, when prefixed with `/`', async() => {
+	it('should route complete paths, when prefixed with `/`', async () => {
 
 		const hub = new Hub({
 			tenant,
@@ -189,7 +189,7 @@ describe('Digital Hub API', () => {
 	})
 
 
-	it('should let options.json be overideable', async() => {
+	it('should let options.json be overideable', async () => {
 
 		const hub = new Hub({
 			tenant,

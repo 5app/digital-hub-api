@@ -1,0 +1,6 @@
+Name,Description,Type,RefID,ParentRefID,Tags,ThumbnailPath,WebURL,OpenInIFrame,Path,DisableDownload,MimeType,CompletionTime
+My Folder,Test Folder Description,folder,my-folder,,,,,,,,,
+5app website,Test link Description,web,my-link,my-folder,"Website, Learning",thumbnails/5app-logo.png,https://5app.com,1,,,,
+My Section,,section,my-section,,,,,,,,,
+Video,Test Video Description,upload,my-video,my-folder,Video,https://avatars3.githubusercontent.com/u/1543850?s=400&u=1d1959a4ee94b3f98090028885e701b8554e2614&v=4,,,files/video.mp4,1,,600
+My ,Test Playlist Description,playlist,my-playlist,,MyPlaylists,,,,,,,

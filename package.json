@@ -47,7 +47,7 @@
     "eslint": "^6.0.0",
     "eslint-config-5app": "^0.7.6",
     "eslint-plugin-promise": "^4.2.1",
-    "mocha": "^6.2.0",
+    "mocha": "^6.2.2",
     "mockery": "^2.1.0",
     "nyc": "13.2.0",
     "pre-commit": "^1.2.2",

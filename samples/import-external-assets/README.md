@@ -23,5 +23,5 @@ NODE_DEBUG=request node -r dotenv/config import-external-assets/import-external-
 | ------------------ |:--------------:| ----------------------------------------------------:|
 | AssetId            | Integer        | this is internal asset id (assetDomains.asset_id)    |
 | ExternalAssetId    | Integer        | this is an id of an asset in external system         |
-| ExternalAssetType  | Enum           | this is an type of an asset in external system       dep| 
+| ExternalAssetType  | Enum           | this is an type of an asset in external system type  | 
 |                    |                | possible values: ('material', 'e-learning', 'video') |

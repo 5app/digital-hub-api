@@ -1,7 +1,11 @@
 # Usage
 In project repo's samples directory:
-```
-NODE_DEBUG=requestn node -r dotenv/config import-external-assets/import-external-assets.js import-external-assets/data/external_assets.csv
+```sh
+node -r dotenv/config import-external-assets/import-external-assets.js import-external-assets/data/external_assets.csv
+
+# for debug mode proceed with NODE_DEBUG=request 
+
+NODE_DEBUG=request node -r dotenv/config import-external-assets/import-external-assets.js import-external-assets/data/external_assets.csv
 ```
 
 # CSV data formats
@@ -19,5 +23,5 @@ NODE_DEBUG=requestn node -r dotenv/config import-external-assets/import-external
 | ------------------ |:--------------:| ----------------------------------------------------:|
 | AssetId            | Integer        | this is internal asset id (assetDomains.asset_id)    |
 | ExternalAssetId    | Integer        | this is an id of an asset in external system         |
-| ExternalAssetType  | Enum           | this is an type of an asset in external system       | 
+| ExternalAssetType  | Enum           | this is an type of an asset in external system       dep| 
 |                    |                | possible values: ('material', 'e-learning', 'video') |

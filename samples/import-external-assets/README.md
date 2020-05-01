@@ -1,5 +1,5 @@
 # Usage
-In project repo's sample directory:
+In project repo's samples directory:
 ```
 NODE_DEBUG=requestn node -r dotenv/config import-external-assets/import-external-assets.js import-external-assets/data/external_assets.csv
 ```
@@ -14,13 +14,10 @@ NODE_DEBUG=requestn node -r dotenv/config import-external-assets/import-external
 
 
 ## Data structure for CSV file
-----------------------------------------------------------------------------------------------
-| Column Name:      |  Type      |    Description
-|-------------------|-------------------------------------------------------------------------
-| AssetId           |  Integer   | this is internal asset id (assetDomains.asset_id)
-|-------------------|------------|------------------------------------------------------------
-| ExternalAssetId   |  Integer   | this is an id of an asset in external system 
-|-------------------|------------|------------------------------------------------------------
-| ExternalAssetType |  Enum      | this is an ide of an asset in external system 
-|                   |            | possible values: ('material', 'e-learning', 'video') 
-----------------------------------------------------------------------------------------------
+
+| Column Name:       | Type           | Description                                          |
+| ------------------ |:--------------:| ----------------------------------------------------:|
+| AssetId            | Integer        | this is internal asset id (assetDomains.asset_id)    |
+| ExternalAssetId    | Integer        | this is an id of an asset in external system         |
+| ExternalAssetType  | Enum           | this is an type of an asset in external system       | 
+|                    |                | possible values: ('material', 'e-learning', 'video') |

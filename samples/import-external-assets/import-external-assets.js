@@ -174,7 +174,7 @@ async function processRecord({
 }) {
 	const newExternalId = `${externalassetid}:${externalassettype}`
 	const records = await api({
-		path: 'api/assetDomains',
+		path: 'api/distributedAssets',
 		qs: {
 			fields: ['external_ref_id', 'id'],
 			filter: {
@@ -185,7 +185,7 @@ async function processRecord({
 	})
 
 	if (!records.data.length) {
-		throw new Error('No assetDomains record has been found')
+		throw new Error('No distributedAssets record has been found')
 	}
 	const {external_ref_id, id: assetDomainsId} = records.data[0]
 
@@ -196,7 +196,7 @@ async function processRecord({
 
 	await api({
 		method: 'patch',
-		path: 'api/assetDomains',
+		path: 'api/distributedAssets',
 		qs: {
 			filter: {
 				id: assetDomainsId,

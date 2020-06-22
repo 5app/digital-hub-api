@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/*eslint no-console: "off"*/
+/* eslint no-console: "off"*/
 
 // This script takes a CSV file as the first argument and processes each row.
 // It uses the unique customer reference field to find and patch, or otherwise create anew
@@ -67,7 +67,7 @@ async function processFile(filePath) {
 					}
 				})
 			}
-			catch (e) {
+			catch {
 				// Ignore
 			}
 
@@ -184,7 +184,7 @@ async function deleteCollectionAsset(id) {
 
 	return api({
 		method: 'delete',
-		path: `api/assetCollections/${ id}`
+		path: `api/assetCollections/${id}`
 	})
 }
 

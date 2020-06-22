@@ -1,11 +1,11 @@
 /* eslint no-console: "off"*/
 
 /**
- * Set theme of a hub
+ * Add a user to a hub
  *
  * @example
  *
- * node -r dotenv/config settings/set-theme.js 5app
+ * node -r dotenv/config add-user andrew@example.com Andrew Dodson
  */
 
 const Hub = require('../../src/api')
@@ -25,18 +25,22 @@ const hub = new Hub({
 
 async function init() {
 
-	// Set name of theme
-	const theme = process.argv.slice(2)[0]
+	// Get values...
+	const [
+		email,
+		first_name,
+		last_name
+	] = process.argv.slice(2)
 
 	// Set hub theme
-	await setHubSetting({theme})
+	await addUser({email, first_name, last_name})
 }
 
-async function setHubSetting(body) {
+async function addUser(body) {
 
 	const resp = await hub.api({
-		path: 'api/domains/self',
-		method: 'patch',
+		path: 'addUser',
+		method: 'post',
 		body
 	})
 

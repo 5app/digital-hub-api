@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/*eslint no-console: "off"*/
+/* eslint no-console: "off"*/
 
 // This script takes a CSV file as the first argument and processes each row.
 // It uses the unique customer reference field to find and patch, or otherwise create anew
@@ -117,7 +117,7 @@ async function processFile(file) {
 
 				})
 			}
-			catch (e) {
+			catch {
 				// Ignore
 			}
 
@@ -384,7 +384,7 @@ async function setTags(asset_id, tags) {
 		}
 	})
 
-	const add =	tag_ids.filter(id => !assigned_tags.data.find(assetTag => assetTag.tag_id === id))
+	const add = tag_ids.filter(id => !assigned_tags.data.find(assetTag => assetTag.tag_id === id))
 
 	if (add.length) {
 		await api({
@@ -537,7 +537,7 @@ function removeAccents(p) {
 				n += p.substr(i, 1)
 			}
 		}
-		catch (e) {
+		catch {
 			// Continue
 		}
 	}

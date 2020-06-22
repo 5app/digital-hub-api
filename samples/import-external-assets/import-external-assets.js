@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/*eslint no-console: "off"*/
+/* eslint no-console: "off"*/
 
 // This script takes a CSV file as the first argument and processes each row.
 // It uses external system meta data related to an asset to update assetDomains table
@@ -152,7 +152,7 @@ async function processFile(filePath) {
 						}
 					})
 				}
-				catch (e) {
+				catch {
 					// Ignore
 				}
 

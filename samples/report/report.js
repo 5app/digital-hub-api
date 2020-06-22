@@ -1,4 +1,4 @@
-/*eslint no-console: "off"*/
+/* eslint no-console: "off"*/
 
 const Hub = require('../../src/api')
 const path = require('path')

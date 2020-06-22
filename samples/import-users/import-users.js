@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/*eslint no-console: "off"*/
+/* eslint no-console: "off"*/
 
 const addUsers = require('./addUsers')
 const readJson = require('./readJson')

@@ -1,10 +1,14 @@
 {
 	"root": true,
-	"extends": "5app",
+	"extends": [
+		"plugin:node/recommended",
+		"5app"
+	],
 	"plugins": [
 		"promise"
 	],
 	"rules": {
+		"node/shebang": 0,
 		"prefer-promise-reject-errors": 2,
 		"promise/prefer-await-to-then": 2,
 		"semi": [2, "never"]

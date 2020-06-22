@@ -4,7 +4,7 @@
   "description": "API for interacting with a Digital Hub",
   "main": "src/api.js",
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=12.0.0"
   },
   "scripts": {
     "lint": "eslint ./",
@@ -46,6 +46,7 @@
     "dotenv": "^8.0.0",
     "eslint": "^7.0.0",
     "eslint-config-5app": "^0.12.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "mocha": "^8.0.0",
     "mockery": "^2.1.0",

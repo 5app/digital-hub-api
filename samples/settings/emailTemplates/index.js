@@ -6,9 +6,16 @@ const path = require('path')
 
 const env = process.env
 
+// Use parameters for the tenant
+const tenant = process.argv[2]
+
+if (!tenant) {
+	console.log('Please provide the tenant')
+}
+
 // Initiate the connection
 const hub = new Hub({
-	tenant: env.DH_TENANT,
+	tenant,
 	username: env.DH_USERNAME,
 	password: env.DH_PASSWORD
 })
@@ -16,12 +23,10 @@ const hub = new Hub({
 // Set the newUser template
 setEmailTemplate({
 	body: fs.readFileSync(path.join(__dirname, 'sampleTemplate.yml')).toString(),
-	from: 'notification@5app.com',
-	lang: 'en-GB',
+	locale: 'en-GB',
 	subject: 'Welcome New User',
-	type: 'newUser'
+	type: 'newUser' // newUser welcomeUser invitationReminder inactivityReminder
 }).catch(e => console.log(e))
-
 
 // Post the email template
 async function setEmailTemplate(body) {
@@ -37,3 +42,4 @@ async function setEmailTemplate(body) {
 	return resp
 }
 
+// node -r dotenv/config ./settings/emailTemplates product.5app.com

@@ -351,16 +351,20 @@ async function upload(id, type, filePath) {
 	}
 
 	// Get the file
-	return api({
-		method: 'post',
-		path: `asset/${id}/${type}`,
-		formData: {
-			fileupload: [file]
-		}
-	}).catch(err => {
+	try {
+
+		return await api({
+			method: 'post',
+			path: `asset/${id}/${type}`,
+			formData: {
+				fileupload: [file]
+			}
+		})
+	}
+	catch (err) {
 		console.error(err)
 		throw new Error(`Failed ${type} ${filePath}`)
-	})
+	}
 }
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@5app/digital-hub-api",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "API for interacting with a Digital Hub",
   "main": "src/api.js",
   "engines": {
@@ -43,12 +43,12 @@
     "chai": "^4.2.0",
     "coveralls": "^3.0.4",
     "csv-parse": "^4.4.3",
-    "dotenv": "^8.0.0",
+    "dotenv": "^10.0.0",
     "eslint": "^7.0.0",
-    "eslint-config-5app": "^0.14.0",
+    "eslint-config-5app": "^0.15.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.0.0",
-    "mocha": "^8.0.0",
+    "mocha": "^9.0.0",
     "mockery": "^2.1.0",
     "nyc": "15.1.0",
     "pre-commit": "^1.2.2",

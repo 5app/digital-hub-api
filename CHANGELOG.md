@@ -1,3 +1,10 @@
+## [0.3.1](https://github.com/5app/digital-hub-api/compare/v0.3.0...v0.3.1) (2021-06-09)
+
+
+### Bug Fixes
+
+* changes to email template fields, add tenant param ([3da6b80](https://github.com/5app/digital-hub-api/commit/3da6b80226c94f0d384ef1c4bca87c5f950b9448))
+
 # [0.3.0](https://github.com/5app/digital-hub-api/compare/v0.2.0...v0.3.0) (2020-05-27)
 
 

@@ -1,9 +1,8 @@
 version: 2.1
 
-aliases:
-  - &cache-key dependency-cache-{{ checksum "package.json" }}
-  - &cache-key-fallback dependency-cache-
- 
+orbs:
+  node: circleci/node@4.1
+
 executors:
   default:
     working_directory: ~/repo
@@ -11,50 +10,24 @@ executors:
       - image: cimg/node:lts
 
 jobs:
-  checkout_code:
-    executor: default
-    steps:
-      - checkout
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - . 
   test:
     executor: default
     steps:
-      - attach_workspace:
-          at: ~/repo
-      - restore_cache:
-          keys:
-            - *cache-key
-            - *cache-key-fallback
-      - run: npm install
-      - save_cache:
-          key: *cache-key
-          paths:
-            - ./node_modules
+      - checkout
+      - node/install-packages
       - run: npm test
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - node_modules
 
   release:
     executor: default
     steps:
-      - attach_workspace:
-          at: ~/repo
       - checkout
+      - node/install-packages
       - run: npm run semantic-release  
 
 workflows:
-  version: 2
   build:
     jobs:
-      - checkout_code
-      - test:
-          requires:
-            - checkout_code
+      - test
       - release:
           context: org-global
           requires:

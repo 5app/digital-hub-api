@@ -4,7 +4,7 @@
   "description": "API for interacting with a Digital Hub",
   "main": "src/api.js",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.17.0"
   },
   "scripts": {
     "lint": "eslint ./",
@@ -42,8 +42,6 @@
     "@semantic-release/git": "^9.0.0",
     "chai": "^4.2.0",
     "coveralls": "^3.0.4",
-    "csv-parse": "^4.4.3",
-    "dotenv": "^10.0.0",
     "eslint": "^7.0.0",
     "eslint-config-5app": "^0.15.0",
     "eslint-plugin-node": "^11.1.0",
@@ -53,27 +51,22 @@
     "nyc": "15.1.0",
     "pre-commit": "^1.2.2",
     "semantic-release": "^17.0.0",
+    "csv-parse": "^4.4.3",
+    "dotenv": "^10.0.0",
     "validator": "^13.0.0",
     "yamljs": "^0.3.0"
+
   },
   "release": {
-    "branch": "master",
-    "prepare": [
-      "@semantic-release/changelog",
-      "@semantic-release/npm",
-      {
-        "path": "@semantic-release/git",
-        "assets": [
-          "package.json",
-          "CHANGELOG.md"
-        ],
-        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-      }
+    "branches": [
+      "main"
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
       "@semantic-release/npm",
+      "@semantic-release/git",
       "@semantic-release/github"
     ]
   }

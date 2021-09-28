@@ -3,7 +3,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/5app/digital-hub-api.svg)](https://greenkeeper.io/)
 [![Known Vulnerabilities](https://snyk.io/test/github/5app/digital-hub-api/badge.svg)](https://snyk.io/test/github/5app/digital-hub-api)
 [![Coverage Status](https://coveralls.io/repos/github/5app/digital-hub-api/badge.svg)](https://coveralls.io/github/5app/digital-hub-api)
-[![CircleCI](https://circleci.com/gh/5app/digital-hub-api/tree/master.svg?style=shield)](https://circleci.com/gh/5app/digital-hub-api/tree/master)
+[![CircleCI](https://circleci.com/gh/5app/digital-hub-api/tree/main.svg?style=shield)](https://circleci.com/gh/5app/digital-hub-api/tree/main)
 
 
 A NodeJS API for interoperating with a [Digital Hub](https://5app.com)

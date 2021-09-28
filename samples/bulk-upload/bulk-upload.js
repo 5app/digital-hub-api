@@ -485,6 +485,7 @@ function formatValue(value) {
 // Format Time
 // 00:00:00
 function formatTime(value) {
+	// eslint-disable-next-line max-params
 	return value.replace(/^([\d]{2}):([\d]{2}):([\d]{2})$/, (patt, h, m, s) => ((((+h * 60) + +m) * 60) + +s) / 60)
 }
 

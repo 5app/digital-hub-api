@@ -9,16 +9,21 @@ before(() => {
 		useCleanCache: true
 	})
 
-	mockery.registerMock('request-promise-native', async opts => {
+	mockery.registerMock('node-fetch', async (url, opts) => {
 
-		if (!opts.json) {
-			return JSON.stringify(opts)
-		}
-
-		if (opts.uri.match('/auth/login')) {
+		if (url.href.match('/auth/login')) {
 			opts.access_token = 'token'
 		}
-		return opts
+
+		const resp = {
+			...opts,
+			uri: url.href,
+			json() {
+				return resp
+			}
+		}
+
+		return resp
 	})
 
 	Hub = require('../../src/api')
@@ -59,7 +64,14 @@ describe('Digital Hub API', () => {
 			path: 'api'
 		})
 
-		expect(resp.headers).to.have.property('Authorization', 'Bearer token')
+		const expectHeaders = expect(resp).to.have.property('headers')
+
+		expectHeaders
+			.to.have.property('Accept', 'application/json')
+
+		expectHeaders
+			.to.have.property('Authorization', 'Bearer token')
+
 		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
 	})
 
@@ -166,10 +178,14 @@ describe('Digital Hub API', () => {
 			}
 		})
 
-		expect(resp.qs).to.have.property('json', '{"key":"value"}')
-		expect(resp.qs).to.have.property('a', 1)
-		expect(resp.qs).to.not.have.property('token')
-		expect(resp.qs).to.not.have.property('access_token')
+		const url = new URL(resp.uri)
+
+		const qs = Object.fromEntries(url.searchParams)
+
+		expect(qs).to.have.property('json', '{"key":"value"}')
+		expect(qs).to.have.property('a', '1')
+		expect(qs).to.not.have.property('token')
+		expect(qs).to.not.have.property('access_token')
 	})
 
 
@@ -200,10 +216,14 @@ describe('Digital Hub API', () => {
 		const resp = await hub.api({
 			path: '/v2/service/picture',
 			json: false,
-			resolveWithFullResponse: true
 		})
 
-		expect(resp).to.be.a('string')
+		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/picture`)
+
+		expect(resp)
+			.to.have.property('headers')
+			.to.not.have.property('Accept', 'application/json')
+
 	})
 
 })

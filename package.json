@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/5app/digital-hub-api#readme",
   "dependencies": {
-    "node-fetch": "^2.6.5",
+    "node-fetch": "^3.0.0",
     "tricks": "^1.12.0"
   },
   "devDependencies": {

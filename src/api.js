@@ -24,7 +24,7 @@ module.exports = class Hub {
 		const url = new URL(path, `https://${this.options.tenant}`)
 
 		// How to handle JSON
-		// Explitly request JSON response
+		// Explicitly request JSON response
 		const convertToJSON = json ?? true
 		if (convertToJSON) {
 			headers.Accept = 'application/json'

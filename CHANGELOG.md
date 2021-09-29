@@ -1,3 +1,21 @@
+# [1.0.0](https://github.com/5app/digital-hub-api/compare/v0.3.1...v1.0.0) (2021-09-29)
+
+
+### Features
+
+* replace request with node-fetch, [#100](https://github.com/5app/digital-hub-api/issues/100) ([#105](https://github.com/5app/digital-hub-api/issues/105)) ([337df02](https://github.com/5app/digital-hub-api/commit/337df021fb1377573ff338c748bab0bd2c5d6836))
+
+
+### BREAKING CHANGES
+
+* Node fetch returns a different instance when used with `json:false` argument
+
+* chore: typo src/api.js
+
+Co-authored-by: Iheb KHEMISSI <iheb.khemissi+github@gmail.com>
+
+Co-authored-by: Iheb KHEMISSI <iheb.khemissi+github@gmail.com>
+
 ## [0.3.1](https://github.com/5app/digital-hub-api/compare/v0.3.0...v0.3.1) (2021-06-09)
 
 

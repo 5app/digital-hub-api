@@ -7,6 +7,10 @@
 	"plugins": [
 		"promise"
 	],
+	"env": {
+		"node": true,
+		"es2020": true
+	},
 	"rules": {
 		"node/shebang": 0,
 		"prefer-promise-reject-errors": 2,

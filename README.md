@@ -36,7 +36,7 @@ const hub = new Hub({
 
 ## api
 
-This makes a request using [request-promise](https://www.npmjs.com/package/request-promise-native). 
+This makes a request using [node-fetch](https://www.npmjs.com/package/node-fetch). 
 
 ```javascript
 await hub.api({

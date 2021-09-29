@@ -13,10 +13,7 @@ const api = require('./api.js')
 
 
 // Reading files from URL's
-const request = require('request')
-	.defaults({
-		forever: true
-	})
+const fetch = require('node-fetch')
 
 // Import tools for parsing CSV files
 const parse = require('csv-parse')
@@ -337,7 +334,13 @@ async function upload(id, type, filePath) {
 
 		// Promise...
 		// Pipe file to destination...
-		file = request.get(filePath).on('error', err => console.error(err))
+		try {
+			const req = await fetch(filePath)
+			file = req.body
+		}
+		catch (err) {
+			console.error(err)
+		}
 	}
 	else {
 		// The path given is relative to the SOURCE_ASSET_DATA
@@ -352,7 +355,9 @@ async function upload(id, type, filePath) {
 
 	// Get the file
 	try {
-
+		// WARNING
+		// This is a deprecated API. Files can no longer be uploaded in this manner
+		// @todo: Update this example
 		return await api({
 			method: 'post',
 			path: `asset/${id}/${type}`,

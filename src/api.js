@@ -1,4 +1,4 @@
-const request = require('request-promise-native')
+const fetch = require('node-fetch')
 const extend = require('tricks/object/extend')
 
 module.exports = class Hub {
@@ -18,26 +18,42 @@ module.exports = class Hub {
 			throw new Error('Missing property tenant')
 		}
 
-		const uri = new URL(options.path, `https://${this.options.tenant}`).href
+		const {path, qs, json, headers = {}, ...opts} = options
 
-		options.uri = uri
+		// URL Path
+		const url = new URL(path, `https://${this.options.tenant}`)
 
-		if (!('json' in options)) {
-			options.json = true
+		// How to handle JSON
+		// Explitly request JSON response
+		const convertToJSON = json ?? true
+		if (convertToJSON) {
+			headers.Accept = 'application/json'
 		}
 
-		options.rejectUnauthorized = false
+		// If the body is present and is an object
+		// stringify it and set content-type header
+		if (typeof(opts.body) === 'object') {
+			headers['Content-Type'] = 'application/json'
+			opts.body = JSON.stringify(opts.body)
+		}
 
-		{
-			const qs = options.qs
+		// Append QS to url
+		if (qs) {
 			for (const x in qs) {
 				if (typeof qs[x] === 'object') {
 					qs[x] = JSON.stringify(qs[x])
 				}
+				url.searchParams.append(x, qs[x])
 			}
 		}
 
-		return request(options)
+		const resp = await fetch(url, {...opts, headers})
+
+		if (convertToJSON) {
+			return resp.json()
+		}
+
+		return resp
 	}
 
 	// Login the user

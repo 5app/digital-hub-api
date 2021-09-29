@@ -36,10 +36,18 @@ executeQuery(report).catch(e => console.log(e))
 // Grab the assets
 async function executeQuery(report) {
 
+	const json = report.qs?.format === 'json'
+
 	let resp = await hub.api({
 		path: `api/${report.root}`,
+		json,
 		qs: report.query
 	})
+
+	// Get the response as text
+	if (!json) {
+		resp = await resp.text()
+	}
 
 	if (!(typeof resp === 'string' || resp instanceof Buffer)) {
 		resp = JSON.stringify(resp)

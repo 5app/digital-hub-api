@@ -3,9 +3,9 @@ In project repo's samples directory:
 ```sh
 node -r dotenv/config import-external-assets/import-external-assets.js import-external-assets/data/external_assets.csv
 
-# for debug mode proceed with NODE_DEBUG=request 
+# for debug mode proceed with NODE_DEBUG=http 
 
-NODE_DEBUG=request node -r dotenv/config import-external-assets/import-external-assets.js import-external-assets/data/external_assets.csv
+NODE_DEBUG=http node -r dotenv/config import-external-assets/import-external-assets.js import-external-assets/data/external_assets.csv
 ```
 
 # CSV data formats

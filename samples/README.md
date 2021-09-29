@@ -16,9 +16,9 @@ Open the sample directories to see the options for running each one.
 
 ## Debugging
 
-You can set the ENV VAR to `NODE_DEBUG=request` to see what is being transmitted in the api.
+You can set the ENV VAR to `NODE_DEBUG=http` to see what is being transmitted in the api.
 
 e.g.
 
-	NODE_DEBUG=request node -r dotenv/config report/report.js opens-by-day-of-week
+	NODE_DEBUG=http node -r dotenv/config report/report.js opens-by-day-of-week
 

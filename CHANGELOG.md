@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/5app/digital-hub-api/compare/v1.0.0...v1.0.1) (2021-09-29)
+
+
+### Bug Fixes
+
+* **types:** initial types for use with TypeScript ([cee7d39](https://github.com/5app/digital-hub-api/commit/cee7d394da5d50aa98012a65366a98035d8fdf11))
+
 # [1.0.0](https://github.com/5app/digital-hub-api/compare/v0.3.1...v1.0.0) (2021-09-29)
 
 

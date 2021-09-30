@@ -25,7 +25,8 @@
     "url": "git+https://github.com/5app/digital-hub-api.git"
   },
   "files": [
-    "src/"
+    "src/",
+    "@types/"
   ],
   "author": "MrSwitch",
   "license": "ISC",

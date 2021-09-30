@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/5app/digital-hub-api/compare/v1.0.2...v1.0.3) (2021-09-30)
+
+
+### Bug Fixes
+
+* **types:** add api qs to list of supported properties ([7e8f320](https://github.com/5app/digital-hub-api/commit/7e8f320f740dde32bb5475c9f00e1a67eb1ec085))
+
 ## [1.0.2](https://github.com/5app/digital-hub-api/compare/v1.0.1...v1.0.2) (2021-09-30)
 
 

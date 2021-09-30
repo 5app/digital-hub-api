@@ -8,6 +8,7 @@ interface DigitalHubApiCallOptions {
 	path: string;
 	method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
 	body?: any;
+	qs?: object;
 	json?: boolean;
 }
 

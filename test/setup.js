@@ -1,1 +1,2 @@
-global.expect = require('chai').expect
+import nock from 'nock'
+nock.disableNetConnect()

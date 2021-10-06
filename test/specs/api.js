@@ -1,45 +1,58 @@
-const mockery = require('mockery')
+import {expect} from 'chai'
+import nock from 'nock'
+
 let Hub
+const tenant = 'test.com'
+const origin = `https://${tenant}`
+const username = 'username'
+const password = 'password'
 
-before(() => {
 
-	mockery.enable({
-		warnOnReplace: false,
-		warnOnUnregistered: false,
-		useCleanCache: true
-	})
+beforeEach(async () => {
 
-	mockery.registerMock('node-fetch', async (url, opts) => {
+	const headers = {
+		'content-type': 'application/json'
+	}
 
-		if (url.href.match('/auth/login')) {
-			opts.access_token = 'token'
-		}
+	nock(origin, headers)
+		.post('/auth/login')
+		.reply((url, reqBody) => {
 
-		const resp = {
-			...opts,
-			uri: url.href,
-			json() {
-				return resp
+			const opts = {
+				access_token: 'token'
 			}
-		}
 
-		return resp
-	})
+			expect(reqBody).to.deep.equal({username, password})
 
-	Hub = require('../../src/api')
-})
+			const resp = {
+				...opts,
+				uri: url.href,
+			}
 
-after(() => {
-	mockery.disable()
-	mockery.deregisterAll()
+			return [200, resp]
+		})
+
+	nock(origin, {...headers, Authorization: 'Bearer token'})
+		.get(/\/v2\/service\/.*/)
+		.reply(function(url) {
+
+			const opts = {}
+
+			const resp = {
+				...opts,
+				uri: url,
+				headers: this.req.headers
+			}
+
+			return [200, resp]
+		})
+
+
+	Hub = (await import('../../src/api.js')).default
 })
 
 
 describe('Digital Hub API', () => {
-
-	const username = 'username'
-	const password = 'password'
-	const tenant = 'test.com'
 
 	it('should have a constructor which returns an instance', () => {
 
@@ -64,15 +77,7 @@ describe('Digital Hub API', () => {
 			path: 'api'
 		})
 
-		const expectHeaders = expect(resp).to.have.property('headers')
-
-		expectHeaders
-			.to.have.property('Accept', 'application/json')
-
-		expectHeaders
-			.to.have.property('Authorization', 'Bearer token')
-
-		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
+		expect(resp).to.have.property('uri', '/v2/service/api')
 	})
 
 	it('should throw an error when authentication fails', async () => {
@@ -149,13 +154,16 @@ describe('Digital Hub API', () => {
 			password
 		})
 
-		hub.access_token = 'inst_token'
+		const token = 'a token already defined'
+		hub.access_token = token
 
 		const resp = await hub.api({
 			path: 'api'
 		})
 
-		expect(resp.headers).to.have.property('Authorization', 'Bearer inst_token')
+		expect(resp.headers)
+			.to.have.property('authorization')
+			.to.include(`Bearer ${token}`)
 	})
 
 	it('should JSON.stringify objects in qs', async () => {
@@ -178,7 +186,7 @@ describe('Digital Hub API', () => {
 			}
 		})
 
-		const url = new URL(resp.uri)
+		const url = new URL(resp.uri, origin)
 
 		const qs = Object.fromEntries(url.searchParams)
 
@@ -201,7 +209,7 @@ describe('Digital Hub API', () => {
 			path: '/v2/service/api'
 		})
 
-		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/api`)
+		expect(resp).to.have.property('uri', '/v2/service/api')
 	})
 
 
@@ -218,7 +226,7 @@ describe('Digital Hub API', () => {
 			json: false,
 		})
 
-		expect(resp).to.have.property('uri', `https://${tenant}/v2/service/picture`)
+		expect(resp).to.have.property('url', `${origin}/v2/service/picture`)
 
 		expect(resp)
 			.to.have.property('headers')

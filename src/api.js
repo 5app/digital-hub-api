@@ -1,7 +1,7 @@
-const fetch = require('node-fetch')
-const extend = require('tricks/object/extend')
+import fetch from 'node-fetch'
+import extend from 'tricks/object/extend.js'
 
-module.exports = class Hub {
+export default class Hub {
 
 	constructor(opts) {
 		this.options = opts

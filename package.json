@@ -45,7 +45,7 @@
     "coveralls": "^3.0.4",
     "csv-parse": "^5.0.0",
     "dotenv": "^16.0.0",
-    "eslint": "^7.0.0",
+    "eslint": "^8.0.0",
     "eslint-config-5app": "^0.16.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",

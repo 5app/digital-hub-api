@@ -1,6 +1,8 @@
 const fetch = require('node-fetch')
 const extend = require('tricks/object/extend')
 
+// This is a hack for an instance whereby the node-fetch module is incorrectly being imported
+const fetchFunction = typeof fetch === 'function' ? fetch : fetch.default
 module.exports = class Hub {
 
 	constructor(opts) {
@@ -47,7 +49,7 @@ module.exports = class Hub {
 			}
 		}
 
-		const resp = await fetch(url, {...opts, headers})
+		const resp = await fetchFunction(url, {...opts, headers})
 
 		if (convertToJSON) {
 			return resp.json()

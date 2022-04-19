@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/5app/digital-hub-api/compare/v1.0.3...v1.0.4) (2022-04-19)
+
+
+### Bug Fixes
+
+* Fix child hub setup readme, noissue ([0b5b8d1](https://github.com/5app/digital-hub-api/commit/0b5b8d1772a025ee0f5c737dbdce3b141f51ee55))
+
 ## [1.0.3](https://github.com/5app/digital-hub-api/compare/v1.0.2...v1.0.3) (2021-09-30)
 
 

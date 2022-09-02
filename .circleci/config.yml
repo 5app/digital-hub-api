@@ -29,6 +29,6 @@ workflows:
     jobs:
       - test
       - release:
-          context: org-global
+          context: github-release
           requires:
             - test

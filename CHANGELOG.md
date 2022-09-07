@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/5app/digital-hub-api/compare/v1.0.4...v1.0.5) (2022-09-07)
+
+
+### Bug Fixes
+
+* **package:** add to github registry ([3d8ea00](https://github.com/5app/digital-hub-api/commit/3d8ea005da756405b8634263e05adb94f27be7e4))
+
 ## [1.0.4](https://github.com/5app/digital-hub-api/compare/v1.0.3...v1.0.4) (2022-04-19)
 
 

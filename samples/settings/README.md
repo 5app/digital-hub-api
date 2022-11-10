@@ -2,7 +2,6 @@
 
 Here are examples of configuring a Digital Hub
 
-
 # Setting a child hub
 
 ```bash

@@ -1,12 +1,12 @@
 ---
-linkText: "Get Started"
-title: "Welcome to the {{domain.pageTitle}}"
+linkText: 'Get Started'
+title: 'Welcome to the {{domain.pageTitle}}'
 signature: "Thanks\nThe {{domain.pageTitle}} Team"
-footer: "{{#if content.issuer}}This email was sent to you by {{content.issuer}}<br />{{/if}}
-<a href=\"{{{domain.origin}}}\">{{domain.pageTitle}}</a>"
+footer:
+    '{{#if content.issuer}}This email was sent to you by {{content.issuer}}<br />{{/if}}
+    <a href="{{{domain.origin}}}">{{domain.pageTitle}}</a>'
 ---
-
-## SAMPLE TEMPLATE 
+## SAMPLE TEMPLATE
 
 Hi {{#if recipient.name}}{{recipient.name}}!{{/if}}
 

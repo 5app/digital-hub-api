@@ -9,12 +9,12 @@ workflows:
         jobs:
             - node/test
             - release/npm_and_github:
-                context:
-                    - org-global
-                    - github-release
-                requires:
-                    - node/test
-                filters:
-                    branches:
-                        only:
-                            - main
+                  context:
+                      - org-global
+                      - github-release
+                  requires:
+                      - node/test
+                  filters:
+                      branches:
+                          only:
+                              - main

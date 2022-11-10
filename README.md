@@ -5,14 +5,11 @@
 [![Coverage Status](https://coveralls.io/repos/github/5app/digital-hub-api/badge.svg)](https://coveralls.io/github/5app/digital-hub-api)
 [![CircleCI](https://circleci.com/gh/5app/digital-hub-api/tree/main.svg?style=shield)](https://circleci.com/gh/5app/digital-hub-api/tree/main)
 
-
 A NodeJS API for interoperating with a [Digital Hub](https://5app.com)
-
 
 # Samples
 
 The [samples folder](./samples) highlights how the API can be used to automate and report operations with a Digital Hub.
-
 
 # Core API
 
@@ -28,15 +25,15 @@ The constructor defines the environment and user credentials
 
 ```javascript
 const hub = new Hub({
-	tenant, 
+	tenant,
 	username,
-	password
-})
+	password,
+});
 ```
 
 ## api
 
-This makes a request using [node-fetch](https://www.npmjs.com/package/node-fetch). 
+This makes a request using [node-fetch](https://www.npmjs.com/package/node-fetch).
 
 ```javascript
 await hub.api({
@@ -44,10 +41,10 @@ await hub.api({
 	qs: {
 		fields: ['id', 'name'],
 		filters: {
-			parent_id: 13123
-		}
-	}
-})
+			parent_id: 13123,
+		},
+	},
+});
 ```
 
 Note: Docs on the available HTTP endpoints, methods and parameters are in development.

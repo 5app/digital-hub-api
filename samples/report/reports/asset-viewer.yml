@@ -1,7 +1,7 @@
 root: apps
-query: 
-  fields: 
-    - name
-    - id
-    - viewerUrl
-  limit: 10
+query:
+    fields:
+        - name
+        - id
+        - viewerUrl
+    limit: 10

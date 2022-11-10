@@ -1,11 +1,11 @@
 root: collectionAsset
 query:
     fields:
-      'ID': 'id'
-      'Name': 'name'
-      'Tags': 'GROUP_CONCAT(tags.name)'
+        'ID': 'id'
+        'Name': 'name'
+        'Tags': 'GROUP_CONCAT(tags.name)'
     format: csv
     limit: 1000
     orderby: name
     filter:
-      type: 'collection'
+        type: 'collection'

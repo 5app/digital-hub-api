@@ -1,12 +1,12 @@
 root: userCollections
 query:
     fields:
-      'employeeNumber': 'user.employeeId'
-      'studentEmail': 'user.name'
-      'componentID': 'collectionAsset.id'
-      'progress': 'completion_rate'
-      'completionDate': 'updated_time'
-      'totalHours': 'SUM(collectionAsset.assetCollections.commonAsset.completion_time)'
+        'employeeNumber': 'user.employeeId'
+        'studentEmail': 'user.name'
+        'componentID': 'collectionAsset.id'
+        'progress': 'completion_rate'
+        'completionDate': 'updated_time'
+        'totalHours': 'SUM(collectionAsset.assetCollections.commonAsset.completion_time)'
     filter:
-      user:
-        '-employeeid': null
+        user:
+            '-employeeid': null

@@ -1,8 +1,8 @@
 root: events
 query:
     fields:
-      'Day': 'DAYNAME(created_time)'
-      'Count Opens': 'COUNT(*)'
+        'Day': 'DAYNAME(created_time)'
+        'Count Opens': 'COUNT(*)'
     groupby: 'DAYOFWEEK(created_time)'
     orderby: 'DAYOFWEEK(created_time)'
     format: csv

@@ -25,50 +25,50 @@ query:
     limit: 10000
     format: 'csv'
     filter:
-      type: 'playlist'
+        type: 'playlist'
     join:
-      userCollections:
-        type: 'user'
-      userCollections$progress:
-        is_deleted: 
-          - 0
-          - 1
-      userCollections$a:
-        completion_rate: 1
-        is_deleted: 
-          - 0
-          - 1
-      userCollections$b:
-        type: 'user'
-        '-completion_rate': 1
-        'updated_time': '..${isoSub30}'
-      userCollections$c:
-        type: 'user'
-        '-completion_rate': 1
-        'updated_time': '..${isoSub90}'
-      userCollections$d:
-        type: 'user'
-        'completion_rate': 1
-        'is_deleted': 1
-      userCollections$e:
-        type: 'user'
-        '-completion_rate': 1
-        'is_deleted': 1
-      assetCols$b:
-        commonAsset:
-          events:
+        userCollections:
+            type: 'user'
+        userCollections$progress:
+            is_deleted:
+                - 0
+                - 1
+        userCollections$a:
+            completion_rate: 1
+            is_deleted:
+                - 0
+                - 1
+        userCollections$b:
+            type: 'user'
+            '-completion_rate': 1
+            'updated_time': '..${isoSub30}'
+        userCollections$c:
+            type: 'user'
+            '-completion_rate': 1
+            'updated_time': '..${isoSub90}'
+        userCollections$d:
+            type: 'user'
+            'completion_rate': 1
+            'is_deleted': 1
+        userCollections$e:
+            type: 'user'
+            '-completion_rate': 1
+            'is_deleted': 1
+        assetCols$b:
+            commonAsset:
+                events:
+                    action: 'open'
+                    category: 'asset'
+        events$opens:
             action: 'open'
-            category: 'asset'
-      events$opens:
-        action: 'open'
-        category: 'collection'
-      events$a:
-        action: 'pin'
-        category: 'collection'
-      events$b:
-        action: 'pin'
-        category: 'collection'
-        label: 'recommended'
-      events$c:
-        action: 'unpin'
-        category: 'collection'
+            category: 'collection'
+        events$a:
+            action: 'pin'
+            category: 'collection'
+        events$b:
+            action: 'pin'
+            category: 'collection'
+            label: 'recommended'
+        events$c:
+            action: 'unpin'
+            category: 'collection'

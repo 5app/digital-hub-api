@@ -1,14 +1,14 @@
 root: assetCollections
 query:
     fields:
-      'id': 'id'
-      'rank': 'collectionAsset.assetDomains.rank'
-      'Playlist ID': 'collectionAsset.id'
-      'Playlist RefId': 'collectionAsset.refid'
-      'Playlist Name': 'collectionAsset.name'
-      'Asset ID': 'commonAsset.id'
-      'Asset RefID': 'commonAsset.refid'
-      'Asset Name': 'commonAsset.name'
+        'id': 'id'
+        'rank': 'collectionAsset.assetDomains.rank'
+        'Playlist ID': 'collectionAsset.id'
+        'Playlist RefId': 'collectionAsset.refid'
+        'Playlist Name': 'collectionAsset.name'
+        'Asset ID': 'commonAsset.id'
+        'Asset RefID': 'commonAsset.refid'
+        'Asset Name': 'commonAsset.name'
     orderby: rank, collectionAsset.name
     limit: 100
     format: csv

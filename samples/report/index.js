@@ -1,1 +1,1 @@
-require('./report.js')
+require('./report.js');

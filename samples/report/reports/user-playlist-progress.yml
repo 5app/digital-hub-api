@@ -1,15 +1,15 @@
 root: userCollections
 query:
     fields:
-      'User Name': 'user.name'
-      'User ID': 'user.id'
-      'Playlist Name': 'collectionAsset.name'
-      'Playlist ID': 'collectionAsset.id'
-      'Progress': 'completion_rate'
-      'Recommendation or User initiated': 'type'
-      'Unpinned': 'is_deleted'
-      'Created': 'created_time'
-      'Updated': 'updated_time'
+        'User Name': 'user.name'
+        'User ID': 'user.id'
+        'Playlist Name': 'collectionAsset.name'
+        'Playlist ID': 'collectionAsset.id'
+        'Progress': 'completion_rate'
+        'Recommendation or User initiated': 'type'
+        'Unpinned': 'is_deleted'
+        'Created': 'created_time'
+        'Updated': 'updated_time'
     format: csv
     limit: 10000
     filter:

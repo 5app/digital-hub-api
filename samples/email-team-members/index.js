@@ -36,7 +36,7 @@ async function init(teamName) {
 					is_invited: false,
 				},
 			},
-			limit: 10000,
+			limit: 10_000,
 		},
 	});
 

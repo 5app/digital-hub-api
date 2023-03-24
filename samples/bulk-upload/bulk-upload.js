@@ -15,8 +15,8 @@ const fetch = require('node-fetch');
 
 // Import tools for parsing CSV files
 const parse = require('csv-parse');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 // Import Utilities
 const unique = require('tricks/array/unique');
@@ -40,8 +40,9 @@ const fields = [
 ];
 
 // Format columns of CSV
-const columns = columns =>
-	columns.map(name => name.toLowerCase()).map(columnMapper);
+function columns(columns) {
+	return columns.map(name => name.toLowerCase()).map(columnMapper);
+}
 
 const {base, files} = require('./datafiles');
 
@@ -215,7 +216,10 @@ async function processRecord(record) {
 	// Additional operations
 	// These will not fail the asset build, but will report errors as notes
 	const messages = [];
-	const catchErrs = err => messages.push(err.message);
+
+	function catchErrs(err) {
+		messages.push(err.message);
+	}
 
 	// Tags
 	if (tags) {
@@ -470,7 +474,7 @@ function formatValue(value) {
 function formatTime(value) {
 	// eslint-disable-next-line max-params
 	return value.replace(
-		/^([\d]{2}):([\d]{2}):([\d]{2})$/,
+		/^(\d{2}):(\d{2}):(\d{2})$/,
 		// eslint-disable-next-line max-params
 		(patt, h, m, s) => ((+h * 60 + +m) * 60 + +s) / 60
 	);

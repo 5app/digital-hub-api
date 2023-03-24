@@ -1,8 +1,8 @@
 /* eslint no-console: "off"*/
 
 const Hub = require('../../../src/api');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const env = process.env;
 

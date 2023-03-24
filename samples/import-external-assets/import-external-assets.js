@@ -6,11 +6,14 @@
 
 const api = require('./api');
 const parse = require('csv-parse');
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const {files} = require('./data-files');
 
-const columns = columns => columns.map(name => name.toLowerCase());
+// Format columns of CSV
+function columns(columns) {
+	return columns.map(name => name.toLowerCase());
+}
 
 // Loop through and process each file...
 asyncForEach(files, processFile);

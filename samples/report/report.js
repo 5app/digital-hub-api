@@ -1,7 +1,7 @@
 /* eslint no-console: "off"*/
 
 const Hub = require('../../src/api');
-const path = require('path');
+const path = require('node:path');
 const YAML = require('yamljs');
 
 const {DH_USERNAME, DH_PASSWORD, DH_TENANT} = process.env;
@@ -58,7 +58,7 @@ function isoDateAdd(days) {
 
 function transform(obj, map) {
 	if (typeof obj === 'string') {
-		return obj.replace(/\$\{(.*?)\}/g, (m, p) => map[p]);
+		return obj.replace(/\${(.*?)}/g, (m, p) => map[p]);
 	} else if (obj && typeof obj === 'object') {
 		for (const x in obj) obj[x] = transform(obj[x], map);
 	}

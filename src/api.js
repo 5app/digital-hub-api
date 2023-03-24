@@ -103,10 +103,7 @@ module.exports = class Hub {
 		});
 
 		// Prefix the path
-		options.path = new URL(
-			options.path,
-			'https://invalid/v2/service/'
-		).pathname;
+		options.path = new URL(options.path, 'https://invalid/api/').pathname;
 
 		// Trigger the request...
 		return this.request(options);

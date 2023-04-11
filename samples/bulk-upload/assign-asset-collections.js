@@ -126,7 +126,7 @@ async function processRecord(record) {
 // Retrieve the asset using refid
 async function getCollectionAsset(filter) {
 	const resp = await api({
-		path: 'api/assetCollections',
+		path: 'query/assetCollections',
 		qs: {
 			fields,
 			filter,
@@ -145,7 +145,7 @@ async function patchCollectionAsset(filter, body) {
 
 	return api({
 		method: 'patch',
-		path: 'api/assetCollections',
+		path: 'query/assetCollections',
 		qs: {
 			filter,
 			limit: 1,
@@ -158,7 +158,7 @@ async function patchCollectionAsset(filter, body) {
 async function postCollectionAsset(body) {
 	return api({
 		method: 'post',
-		path: 'api/assetCollections',
+		path: 'query/assetCollections',
 		qs: {
 			fields,
 			limit: 1,
@@ -171,7 +171,7 @@ async function postCollectionAsset(body) {
 async function deleteCollectionAsset(id) {
 	return api({
 		method: 'delete',
-		path: `api/assetCollections/${id}`,
+		path: `query/assetCollections/${id}`,
 	});
 }
 
@@ -182,7 +182,7 @@ async function getAssetByRefId(refid) {
 	}
 
 	const resp = await api({
-		path: 'api/assets',
+		path: 'query/assets',
 		qs: {
 			fields: ['id'],
 			filter: {

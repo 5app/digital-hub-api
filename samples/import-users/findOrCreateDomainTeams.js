@@ -13,7 +13,7 @@ async function findOrCreateDomainTeams({users}) {
 
 	// Get the list of all known teams from the the DB
 	const {data: domainTeams} = await api({
-		path: 'api/teams',
+		path: 'query/teams',
 		qs: {
 			fields: ['id', 'name'],
 		},
@@ -43,7 +43,7 @@ async function findOrCreateDomainTeams({users}) {
 		const teamCreationPayload = toBeCreated.map(name => ({name}));
 		const {data: newTeams} = await api({
 			method: 'POST',
-			path: 'api/teams',
+			path: 'query/teams',
 			body: teamCreationPayload,
 			qs: {
 				fields: ['id', 'name'],

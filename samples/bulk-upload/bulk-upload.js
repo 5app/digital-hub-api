@@ -259,7 +259,7 @@ async function getAssetByRefId(refid) {
 	}
 
 	const resp = await api({
-		path: 'api/assets',
+		path: 'query/assets',
 		qs: {
 			fields,
 			filter: {
@@ -276,7 +276,7 @@ async function getAssetByRefId(refid) {
 async function createAssetRecord(body) {
 	return api({
 		method: 'post',
-		path: 'api/assets',
+		path: 'query/assets',
 		qs: {
 			fields,
 		},
@@ -297,7 +297,7 @@ async function patchAssetRecord(asset, patch) {
 	// Run
 	return api({
 		method: 'patch',
-		path: `api/assets/${asset.id}`,
+		path: `query/assets/${asset.id}`,
 		body,
 	});
 }
@@ -307,7 +307,7 @@ async function deleteAssetRecord(id) {
 	// Run
 	return api({
 		method: 'delete',
-		path: `api/assets/${id}`,
+		path: `query/assets/${id}`,
 	});
 }
 
@@ -363,7 +363,7 @@ async function setTags(asset_id, tags) {
 
 	// Get the tags associacted with the asset
 	const assigned_tags = await api({
-		path: 'api/assetTags',
+		path: 'query/assetTags',
 		qs: {
 			fields: ['id', 'tag_id'],
 			filter: {
@@ -380,7 +380,7 @@ async function setTags(asset_id, tags) {
 	if (add.length) {
 		await api({
 			method: 'post',
-			path: 'api/assetTags',
+			path: 'query/assetTags',
 			body: add.map(tag_id => ({asset_id, tag_id})),
 		});
 	}
@@ -392,7 +392,7 @@ async function setTags(asset_id, tags) {
 async function getTagIds(tags) {
 	// Get the tags
 	const match_tags = await api({
-		path: 'api/tags',
+		path: 'query/tags',
 		qs: {
 			fields: ['id', 'name'],
 			filter: {
@@ -413,7 +413,7 @@ async function getTagIds(tags) {
 	if (new_tags.length) {
 		const created_tags = await api({
 			method: 'post',
-			path: 'api/tags',
+			path: 'query/tags',
 			qs: {
 				fields: ['id', 'name'],
 			},

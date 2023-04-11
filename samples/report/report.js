@@ -33,7 +33,7 @@ async function executeQuery(report) {
 	const json = report.qs?.format === 'json';
 
 	let resp = await hub.api({
-		path: `api/${report.root}`,
+		path: `query/${report.root}`,
 		json,
 		qs: report.query,
 	});

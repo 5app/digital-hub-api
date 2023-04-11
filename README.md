@@ -37,7 +37,7 @@ This makes a request using [node-fetch](https://www.npmjs.com/package/node-fetch
 
 ```javascript
 await hub.api({
-	path: 'api/assets',
+	path: 'query/assets',
 	qs: {
 		fields: ['id', 'name'],
 		filters: {

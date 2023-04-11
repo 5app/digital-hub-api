@@ -25,7 +25,7 @@ init(teamName).catch(e => console.log(e));
 async function init(teamName) {
 	// Get members of a team
 	const resp = await hub.api({
-		path: 'api/users',
+		path: 'query/users',
 		qs: {
 			fields: ['id'],
 			filter: {

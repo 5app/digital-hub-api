@@ -33,7 +33,7 @@ setEmailTemplate({
 // Post the email template
 async function setEmailTemplate(body) {
 	const resp = await hub.api({
-		path: 'api/emailTemplates',
+		path: 'query/emailTemplates',
 		method: 'post',
 		body,
 	});

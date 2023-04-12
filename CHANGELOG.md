@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/5app/digital-hub-api/compare/v1.0.5...v1.1.0) (2023-04-12)
+
+
+### Features
+
+* **api:** /api base route change, 5app/hub[#13056](https://github.com/5app/digital-hub-api/issues/13056) 5app/hub[#13144](https://github.com/5app/digital-hub-api/issues/13144) ([82ed9d5](https://github.com/5app/digital-hub-api/commit/82ed9d5bcd5ddb0941afcc273dcc30d088fa14fa))
+
 ## [1.0.5](https://github.com/5app/digital-hub-api/compare/v1.0.4...v1.0.5) (2022-09-07)
 
 

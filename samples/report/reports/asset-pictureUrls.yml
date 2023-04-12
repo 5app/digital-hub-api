@@ -1,7 +1,8 @@
-root: apps
+root: asset
 query:
     fields:
         - name
         - id
-        - viewerUrl
+        - pictureUrl
     limit: 10
+    format: csv

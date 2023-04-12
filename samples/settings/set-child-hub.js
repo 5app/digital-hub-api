@@ -39,7 +39,7 @@ async function init() {
 // Grab the assets
 async function setChildHub(child_domain_id) {
 	const resp = await hub.api({
-		path: 'api/domainRelationships',
+		path: 'query/domainRelationships',
 		method: 'post',
 		body: {
 			child_domain_id,
@@ -51,7 +51,7 @@ async function setChildHub(child_domain_id) {
 
 async function getChildDomainId() {
 	const {id} = await child.api({
-		path: 'api/domains/self',
+		path: 'query/domains/self',
 		qs: {
 			fields: ['id'],
 		},

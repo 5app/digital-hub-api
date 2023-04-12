@@ -22,9 +22,9 @@ getViewerUrls(aud).catch(e => console.log(e));
 // Function to get the Viewer Links
 async function getViewerUrls(aud = '') {
 	const {data} = await hub.api({
-		path: 'api/commonAsset',
+		path: 'query/commonAsset',
 		qs: {
-			fields: ['id', 'name', 'type', 'viewerUrl'],
+			fields: ['id', 'name', 'type', 'pictureUrl'],
 			filter: {
 				type: ['upload', 'web', 'zip'],
 			},
@@ -37,8 +37,8 @@ async function getViewerUrls(aud = '') {
 
 	data.forEach(item => {
 		// Update the viewerURL path
-		if (item.viewerUrl) {
-			item.viewerUrl = `https://${DH_TENANT}${item.viewerUrl}`;
+		if (item.pictureUrl) {
+			item.pictureUrl = `https://${DH_TENANT}${item.pictureUrl}`;
 		}
 		console.log(toCSV(Object.values(item)));
 	});

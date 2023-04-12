@@ -55,7 +55,7 @@ describe('Digital Hub API', () => {
 		});
 
 		const resp = await hub.api({
-			path: 'api',
+			path: 'query',
 		});
 
 		const expectHeaders = expect(resp).to.have.property('headers');
@@ -64,10 +64,7 @@ describe('Digital Hub API', () => {
 
 		expectHeaders.to.have.property('Authorization', 'Bearer token');
 
-		expect(resp).to.have.property(
-			'uri',
-			`https://${tenant}/v2/service/api`
-		);
+		expect(resp).to.have.property('uri', `https://${tenant}/api/query`);
 	});
 
 	it('should throw an error when authentication fails', async () => {
@@ -185,13 +182,10 @@ describe('Digital Hub API', () => {
 		});
 
 		const resp = await hub.api({
-			path: '/v2/service/api',
+			path: '/api/query',
 		});
 
-		expect(resp).to.have.property(
-			'uri',
-			`https://${tenant}/v2/service/api`
-		);
+		expect(resp).to.have.property('uri', `https://${tenant}/api/query`);
 	});
 
 	it('should let options.json be overideable', async () => {
@@ -202,14 +196,11 @@ describe('Digital Hub API', () => {
 		});
 
 		const resp = await hub.api({
-			path: '/v2/service/picture',
+			path: '/api/picture',
 			json: false,
 		});
 
-		expect(resp).to.have.property(
-			'uri',
-			`https://${tenant}/v2/service/picture`
-		);
+		expect(resp).to.have.property('uri', `https://${tenant}/api/picture`);
 
 		expect(resp)
 			.to.have.property('headers')

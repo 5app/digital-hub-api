@@ -163,7 +163,7 @@ async function processFile(filePath) {
 async function processRecord({assetid, externalassetid, externalassettype}) {
 	const newExternalId = `${externalassetid}:${externalassettype}`;
 	const records = await api({
-		path: 'api/distributedAssets',
+		path: 'query/distributedAssets',
 		qs: {
 			fields: ['external_ref_id', 'id'],
 			filter: {
@@ -185,7 +185,7 @@ async function processRecord({assetid, externalassetid, externalassettype}) {
 
 	await api({
 		method: 'patch',
-		path: 'api/distributedAssets',
+		path: 'query/distributedAssets',
 		qs: {
 			filter: {
 				id: assetDomainsId,

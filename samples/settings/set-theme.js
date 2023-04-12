@@ -29,7 +29,7 @@ async function init() {
 
 async function setHubSetting(body) {
 	const resp = await hub.api({
-		path: 'api/domains/self',
+		path: 'query/domains/self',
 		method: 'patch',
 		body,
 	});

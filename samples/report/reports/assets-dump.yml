@@ -6,12 +6,11 @@ query:
         'Name': 'name'
         'Type': 'type'
         'Description': 'description'
-        'ParentRefID': 'parentAsset.refid'
-        'Tags': 'GROUP_CONCAT(tags.name)'
-        'Mime Type': 'mime_type'
+        'Tags': 'GROUP_CONCAT(assetTags.tags.name)'
+        'Mime Type': 'file.mime_type'
         'WebURL': 'webUrl'
         'Open In IFrame': 'openInIFrame'
-        'Disable Download': 'disableDownload'
+        'Disable Download': 'disabled'
         'Completion Time': 'completion_time'
     format: csv
     limit: 100

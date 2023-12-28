@@ -38,7 +38,7 @@
 		"@5app/prettier-config": "^1.0.4",
 		"@5app/semantic-release-config": "^1.1.0",
 		"@commitlint/config-conventional": "^17.4.4",
-		"chai": "^4.3.7",
+		"chai": "^5.0.0",
 		"commitlint": "^17.5.0",
 		"coveralls": "^3.1.1",
 		"csv-parse": "^5.3.6",

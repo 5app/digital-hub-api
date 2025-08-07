@@ -32,7 +32,7 @@
 	"homepage": "https://github.com/5app/digital-hub-api#readme",
 	"dependencies": {
 		"node-fetch": "^2.6.7",
-		"tricks": "^1.13.5"
+		"tricks": "^2.0.0"
 	},
 	"devDependencies": {
 		"@5app/prettier-config": "^1.0.4",

@@ -37,9 +37,9 @@
 	"devDependencies": {
 		"@5app/prettier-config": "^1.0.4",
 		"@5app/semantic-release-config": "^1.1.0",
-		"@commitlint/config-conventional": "^17.4.4",
+		"@commitlint/config-conventional": "^19.0.0",
 		"chai": "^4.3.7",
-		"commitlint": "^17.5.0",
+		"commitlint": "^19.0.0",
 		"coveralls": "^3.1.1",
 		"csv-parse": "^5.3.6",
 		"dotenv": "^16.0.3",
